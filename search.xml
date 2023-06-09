@@ -20,11 +20,11 @@
       
         <tags>
             
+            <tag> java </tag>
+            
             <tag> sqli </tag>
             
             <tag> ecology </tag>
-            
-            <tag> java </tag>
             
         </tags>
       
@@ -49,9 +49,9 @@
       
         <tags>
             
-            <tag> sql </tag>
-            
             <tag> rce </tag>
+            
+            <tag> sql </tag>
             
         </tags>
       
@@ -76,11 +76,11 @@
       
         <tags>
             
+            <tag> java </tag>
+            
             <tag> sqli </tag>
             
             <tag> ecology </tag>
-            
-            <tag> java </tag>
             
         </tags>
       
@@ -105,11 +105,11 @@
       
         <tags>
             
-            <tag> java </tag>
-            
             <tag> deserialization </tag>
             
             <tag> xstream </tag>
+            
+            <tag> java </tag>
             
         </tags>
       
@@ -134,11 +134,11 @@
       
         <tags>
             
-            <tag> rce </tag>
-            
             <tag> proxy </tag>
             
             <tag> path-traversal </tag>
+            
+            <tag> rce </tag>
             
             <tag> golang </tag>
             
