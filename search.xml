@@ -105,11 +105,11 @@
       
         <tags>
             
-            <tag> java </tag>
-            
             <tag> deserialization </tag>
             
             <tag> xstream </tag>
+            
+            <tag> java </tag>
             
         </tags>
       
