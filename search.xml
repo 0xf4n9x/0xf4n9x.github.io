@@ -20,11 +20,11 @@
       
         <tags>
             
-            <tag> cve </tag>
-            
             <tag> java </tag>
             
             <tag> bypass </tag>
+            
+            <tag> cve </tag>
             
             <tag> rce </tag>
             
@@ -217,9 +217,9 @@
       
         <tags>
             
-            <tag> bypass </tag>
-            
             <tag> dns </tag>
+            
+            <tag> bypass </tag>
             
         </tags>
       
