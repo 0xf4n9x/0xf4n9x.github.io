@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/CVE-2023-32315-openfire-auth-bypass/index.html</loc>
+    <loc>https://0xf4n9x.github.io/cve-2023-32315-openfire-auth-bypass.html</loc>
     
     <lastmod>2023-06-18</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/weaver-ecology9-changeuserinfo-ofslogin/index.html</loc>
+    <loc>https://0xf4n9x.github.io/weaver-ecology9-changeuserinfo-ofslogin.html</loc>
     
     <lastmod>2023-05-20</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2022/clash-unauth-force-configs-csrf-rce/index.html</loc>
+    <loc>https://0xf4n9x.github.io/clash-unauth-force-configs-csrf-rce.html</loc>
     
     <lastmod>2023-05-14</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/realor-tianyi-multiple-sqli2rce/index.html</loc>
+    <loc>https://0xf4n9x.github.io/realor-tianyi-multiple-sqli2rce.html</loc>
     
     <lastmod>2023-04-14</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/about/index.html</loc>
+    <loc>https://0xf4n9x.github.io/about/</loc>
     
     <lastmod>2023-04-08</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/categories/index.html</loc>
+    <loc>https://0xf4n9x.github.io/categories/</loc>
     
     <lastmod>2023-04-03</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/index.html</loc>
+    <loc>https://0xf4n9x.github.io/tags/</loc>
     
     <lastmod>2023-04-03</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/weaver-ecology9-browser-sqli/index.html</loc>
+    <loc>https://0xf4n9x.github.io/weaver-ecology9-browser-sqli.html</loc>
     
     <lastmod>2023-03-04</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2022/cdg-xstream-deserialization-arbitrary-file-upload/index.html</loc>
+    <loc>https://0xf4n9x.github.io/cdg-xstream-deserialization-arbitrary-file-upload.html</loc>
     
     <lastmod>2023-01-09</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2019/pentest-for-campus-server/index.html</loc>
+    <loc>https://0xf4n9x.github.io/pentest-for-campus-server.html</loc>
     
     <lastmod>2021-12-13</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2019/Bypass-campusNet/index.html</loc>
+    <loc>https://0xf4n9x.github.io/Bypass-campusNet.html</loc>
     
     <lastmod>2019-05-04</lastmod>
     
@@ -110,14 +110,7 @@
 
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/bypass/</loc>
+    <loc>https://0xf4n9x.github.io/tags/java/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -138,21 +131,14 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/java/</loc>
+    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/mysql/</loc>
+    <loc>https://0xf4n9x.github.io/tags/bypass/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -173,6 +159,20 @@
   </url>
   
   <url>
+    <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/mysql/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://0xf4n9x.github.io/tags/sqli/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -181,13 +181,6 @@
   
   <url>
     <loc>https://0xf4n9x.github.io/tags/ecology/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -209,6 +202,13 @@
   
   <url>
     <loc>https://0xf4n9x.github.io/tags/golang/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
