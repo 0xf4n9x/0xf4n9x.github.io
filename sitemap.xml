@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/06/CVE-2023-32315-openfire-auth-bypass/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2023/CVE-2023-32315-openfire-auth-bypass/index.html</loc>
     
     <lastmod>2023-06-18</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/05/weaver-ecology9-changeuserinfo-ofslogin/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2023/weaver-ecology9-changeuserinfo-ofslogin/index.html</loc>
     
     <lastmod>2023-05-20</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2022/10/clash-unauth-force-configs-csrf-rce/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2022/clash-unauth-force-configs-csrf-rce/index.html</loc>
     
     <lastmod>2023-05-14</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/04/realor-tianyi-multiple-sqli2rce/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2023/realor-tianyi-multiple-sqli2rce/index.html</loc>
     
     <lastmod>2023-04-14</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2023/03/weaver-ecology9-browser-sqli/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2023/weaver-ecology9-browser-sqli/index.html</loc>
     
     <lastmod>2023-03-04</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2022/12/cdg-xstream-deserialization-arbitrary-file-upload/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2022/cdg-xstream-deserialization-arbitrary-file-upload/index.html</loc>
     
     <lastmod>2023-01-09</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2019/08/pentest-for-campus-server/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2019/pentest-for-campus-server/index.html</loc>
     
     <lastmod>2021-12-13</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/2019/03/Bypass-campusNet/index.html</loc>
+    <loc>https://0xf4n9x.github.io/2019/Bypass-campusNet/index.html</loc>
     
     <lastmod>2019-05-04</lastmod>
     
@@ -110,14 +110,7 @@
 
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/cve/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/java/</loc>
+    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -125,20 +118,6 @@
   
   <url>
     <loc>https://0xf4n9x.github.io/tags/bypass/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/rce/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -159,6 +138,13 @@
   </url>
   
   <url>
+    <loc>https://0xf4n9x.github.io/tags/java/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -173,21 +159,14 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/proxy/</loc>
+    <loc>https://0xf4n9x.github.io/tags/cve/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/path-traversal/</loc>
-    <lastmod>2023-06-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/golang/</loc>
+    <loc>https://0xf4n9x.github.io/tags/rce/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -209,6 +188,27 @@
   
   <url>
     <loc>https://0xf4n9x.github.io/tags/sql/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/proxy/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/path-traversal/</loc>
+    <lastmod>2023-06-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/golang/</loc>
     <lastmod>2023-06-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
