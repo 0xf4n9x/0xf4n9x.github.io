@@ -20,9 +20,9 @@
       
         <tags>
             
-            <tag> bypass </tag>
-            
             <tag> java </tag>
+            
+            <tag> bypass </tag>
             
             <tag> cve </tag>
             
@@ -136,11 +136,11 @@
       
         <tags>
             
+            <tag> java </tag>
+            
             <tag> deserialization </tag>
             
             <tag> xstream </tag>
-            
-            <tag> java </tag>
             
         </tags>
       
