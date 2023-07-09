@@ -20,13 +20,13 @@
       
         <tags>
             
-            <tag> java </tag>
-            
             <tag> bypass </tag>
             
-            <tag> rce </tag>
+            <tag> java </tag>
             
             <tag> cve </tag>
+            
+            <tag> rce </tag>
             
         </tags>
       
@@ -136,11 +136,11 @@
       
         <tags>
             
-            <tag> java </tag>
-            
             <tag> deserialization </tag>
             
             <tag> xstream </tag>
+            
+            <tag> java </tag>
             
         </tags>
       
@@ -165,11 +165,11 @@
       
         <tags>
             
+            <tag> rce </tag>
+            
             <tag> proxy </tag>
             
             <tag> path-traversal </tag>
-            
-            <tag> rce </tag>
             
             <tag> golang </tag>
             
