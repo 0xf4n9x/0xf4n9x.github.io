@@ -51,9 +51,9 @@
             
             <tag> java </tag>
             
-            <tag> cve </tag>
-            
             <tag> bypass </tag>
+            
+            <tag> cve </tag>
             
             <tag> rce </tag>
             
@@ -165,11 +165,11 @@
       
         <tags>
             
+            <tag> java </tag>
+            
             <tag> deserialization </tag>
             
             <tag> xstream </tag>
-            
-            <tag> java </tag>
             
         </tags>
       
@@ -246,9 +246,9 @@
       
         <tags>
             
-            <tag> bypass </tag>
-            
             <tag> dns </tag>
+            
+            <tag> bypass </tag>
             
         </tags>
       

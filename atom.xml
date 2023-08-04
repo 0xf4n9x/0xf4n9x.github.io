@@ -66,9 +66,9 @@
     
     <category term="java" scheme="https://0xf4n9x.github.io/tags/java/"/>
     
-    <category term="cve" scheme="https://0xf4n9x.github.io/tags/cve/"/>
-    
     <category term="bypass" scheme="https://0xf4n9x.github.io/tags/bypass/"/>
+    
+    <category term="cve" scheme="https://0xf4n9x.github.io/tags/cve/"/>
     
     <category term="rce" scheme="https://0xf4n9x.github.io/tags/rce/"/>
     
@@ -173,11 +173,11 @@
     <category term="漏洞分析" scheme="https://0xf4n9x.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/"/>
     
     
+    <category term="java" scheme="https://0xf4n9x.github.io/tags/java/"/>
+    
     <category term="deserialization" scheme="https://0xf4n9x.github.io/tags/deserialization/"/>
     
     <category term="xstream" scheme="https://0xf4n9x.github.io/tags/xstream/"/>
-    
-    <category term="java" scheme="https://0xf4n9x.github.io/tags/java/"/>
     
   </entry>
   
@@ -260,9 +260,9 @@
     
     
     
-    <category term="bypass" scheme="https://0xf4n9x.github.io/tags/bypass/"/>
-    
     <category term="dns" scheme="https://0xf4n9x.github.io/tags/dns/"/>
+    
+    <category term="bypass" scheme="https://0xf4n9x.github.io/tags/bypass/"/>
     
   </entry>
   
