@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>Smartbi token泄漏致使权限绕过</title>
+      <title>Smartbi token泄漏致使任意登录</title>
       <link href="/smartbi-monitorservice-token-disclosure.html"/>
       <url>/smartbi-monitorservice-token-disclosure.html</url>
       
@@ -51,11 +51,11 @@
             
             <tag> java </tag>
             
-            <tag> bypass </tag>
-            
             <tag> rce </tag>
             
             <tag> cve </tag>
+            
+            <tag> bypass </tag>
             
         </tags>
       
@@ -246,9 +246,9 @@
       
         <tags>
             
-            <tag> dns </tag>
-            
             <tag> bypass </tag>
+            
+            <tag> dns </tag>
             
         </tags>
       

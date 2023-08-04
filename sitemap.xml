@@ -126,34 +126,6 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
-    <lastmod>2023-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/bypass/</loc>
-    <lastmod>2023-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/deserialization/</loc>
-    <lastmod>2023-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/xstream/</loc>
-    <lastmod>2023-08-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://0xf4n9x.github.io/tags/proxy/</loc>
     <lastmod>2023-08-04</lastmod>
     <changefreq>weekly</changefreq>
@@ -182,14 +154,14 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
+    <loc>https://0xf4n9x.github.io/tags/deserialization/</loc>
     <lastmod>2023-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/mysql/</loc>
+    <loc>https://0xf4n9x.github.io/tags/xstream/</loc>
     <lastmod>2023-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -203,7 +175,14 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/info-disclosure/</loc>
+    <loc>https://0xf4n9x.github.io/tags/bypass/</loc>
+    <lastmod>2023-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
     <lastmod>2023-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -224,7 +203,28 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
+    <loc>https://0xf4n9x.github.io/tags/dns/</loc>
+    <lastmod>2023-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
+    <lastmod>2023-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/mysql/</loc>
+    <lastmod>2023-08-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/info-disclosure/</loc>
     <lastmod>2023-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
