@@ -137,48 +137,6 @@
 
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/cve/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/java/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/rce/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/proxy/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/path-traversal/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://0xf4n9x.github.io/tags/golang/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://0xf4n9x.github.io/tags/deserialization/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -187,6 +145,13 @@
   
   <url>
     <loc>https://0xf4n9x.github.io/tags/xstream/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/java/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -207,6 +172,34 @@
   </url>
   
   <url>
+    <loc>https://0xf4n9x.github.io/tags/proxy/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/path-traversal/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/rce/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/golang/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://0xf4n9x.github.io/tags/pentest/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -221,14 +214,21 @@
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
+    <loc>https://0xf4n9x.github.io/tags/info-leak/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://0xf4n9x.github.io/tags/info-leak/</loc>
+    <loc>https://0xf4n9x.github.io/tags/cve/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://0xf4n9x.github.io/tags/sql/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
