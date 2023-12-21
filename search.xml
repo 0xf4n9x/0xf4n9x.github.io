@@ -22,9 +22,9 @@
             
             <tag> java </tag>
             
-            <tag> rce </tag>
-            
             <tag> cve </tag>
+            
+            <tag> rce </tag>
             
         </tags>
       
@@ -82,9 +82,9 @@
             
             <tag> java </tag>
             
-            <tag> rce </tag>
-            
             <tag> cve </tag>
+            
+            <tag> rce </tag>
             
         </tags>
       
@@ -248,11 +248,11 @@
       
         <tags>
             
+            <tag> rce </tag>
+            
             <tag> proxy </tag>
             
             <tag> path-traversal </tag>
-            
-            <tag> rce </tag>
             
             <tag> golang </tag>
             
