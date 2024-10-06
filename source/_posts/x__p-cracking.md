@@ -63,6 +63,8 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 00000001001ae832         db         "function_pack_1_cn", 0     ; DATA XREF=cfstring_function_pack_1_cn
 ```
 
+![](/img/post/x__p-cracking/searchinhopper.png)
+
 搜索结果如上，现在倒是如我所愿、意料之中了，不仅搜到了 1year_x\*\*p_pro，function_pack_1 也出现了。跟进 1year_x\*\*p_pro 的数据交叉引用，即 cfstring_1year_x\*\*p_pro，这里又有几个交叉引用，见下。
 
 ```assembly
