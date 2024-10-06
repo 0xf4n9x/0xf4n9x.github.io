@@ -51,6 +51,7 @@ https://www.weaver.com.cn/cs/package/Ecology_security_20230418_v9.0_v10.57.zip?v
 
 ```
 https://www.weaver.com.cn/cs/package/Ecology_security_20230515_v9.0_v10.57.2.zip?v=20230515
+```
 
 由于泛微官方已经将本文两个漏洞的补丁文件覆盖到了 v10.57 版本补丁包中，所以现在下载到的 v10.57 版本补丁包其中也有了相关的漏洞补丁文件。拿现在构造好的链接下载得到的 v10.57 版本补丁包与 v10.57.2 版本补丁包相对比是对比不出什么差异的。
 
