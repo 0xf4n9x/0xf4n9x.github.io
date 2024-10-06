@@ -8,7 +8,7 @@ updated: 2023-03-12T00:00:00+00:00
 date: 2023-01-05T00:00:00+00:00
 slug: java-deserialization-cc1-lazymap
 title: Java反序列化漏洞之LazyMap型CC1链
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b3df05cf-f66c-4434-ac40-e16727067300/r.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=070c4cc79bd9055daaad22a3381582fa07c33e7a11f06ca6a403912a8496965a&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/java-deserialization-cc1-lazymap/1.png
 id: 113906e1-7468-8080-97ba-ccd793082cd8
 ---
 
@@ -178,9 +178,9 @@ public class LazyMapTest {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/81b4171c-673a-468d-802c-bc0a8375eb8c/containskey.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=0ea555418931d8ccdb8106523bbba90ffb0abd77fe29c37beb1f5e8de4028677&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-lazymap/containskey.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c6747974-c629-422f-910d-c7493abf8971/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=eca114c3a64929dd74543aa3e44ca85993828945ae6779c99a8a3c04cb5f8a30&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-lazymap/0.png)
 
 ## AnnotationInvocationHandler#invoke
 
@@ -292,14 +292,14 @@ public class CC1LazyMap {
 向一个存在反序列化漏洞且 JDK 版本小于 8u71 的 Jboss 环境发送如上生成的恶意序列化数据，成功弹出计算器。
 
 ```shell
-curl -H "Content-Type: application/x-java-serialized-object; class=org.jboss.invocation.MarshalledValue" --data-binary "@cc1-lazymap.ser" <http://localhost:8080/invoker/readonly>
+curl -H "Content-Type: application/x-java-serialized-object; class=org.jboss.invocation.MarshalledValue" --data-binary "@cc1-lazymap.ser" http://localhost:8080/invoker/readonly
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f344bfc4-fe5e-4de8-ab2d-bda457adf644/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=043b144546d9471c275ddd424856d43bb028682576e8c730fc9bbb3ebf59e6c2&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-lazymap/1.png)
 
 如下是完整 Gadget 调用链。
 
-```text
+```
 AnnotationInvocationHandler.readObject()
     Map(Proxy).entrySet()
         AnnotationInvocationHandler.invoke()
@@ -317,17 +317,17 @@ AnnotationInvocationHandler.readObject()
                             Runtime.exec()
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/38fd49d7-78c9-445a-bc32-081c40747395/r.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=9145fe87176ac2c7ac28658c4d0763ab31fd42907f55975dd4382fc3185834c5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-lazymap/r.png)
 
 ## Debug 导致的小问题
 
 如上 POC 在调试时，在进行序列化时就会弹出计算器，有时候甚至会弹出两个计算器，这些情况在直接运行的情况下反倒不会出现。这其实是由于在本地调试代码时，调试器会调用一些 toString 等方法，这样便触发了 invoke 的调用，从而导致命令执行。有一种非常简单的方式来避免这种行为，在 IDEA 中关闭如下两项即可。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ed230666-b6ae-49e1-80b1-3af2fa166054/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=78a795f0c370b4a5d0327333f46aa6fc575bba661e575423297df50b926563b9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-lazymap/2.png)
 
 ## 参考
 
-- [https://0xf4n9x.github.io/java-deserialization-vulnerability-principle](https://0xf4n9x.github.io/java-deserialization-vulnerability-principle)
-- [https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap](https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap)
-- [https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections1.java](https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections1.java)
-- [https://mp.weixin.qq.com/s/d5UvL065Lc1WXhsRmb92qw](https://mp.weixin.qq.com/s/d5UvL065Lc1WXhsRmb92qw)
+- https://0xf4n9x.github.io/java-deserialization-vulnerability-principle
+- https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap
+- https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections1.java
+- https://mp.weixin.qq.com/s/d5UvL065Lc1WXhsRmb92qw

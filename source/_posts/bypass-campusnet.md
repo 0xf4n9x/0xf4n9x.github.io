@@ -8,11 +8,13 @@ updated: 2019-05-04T00:00:00+00:00
 date: 2019-03-20T00:00:00+00:00
 slug: bypass-campusnet
 title: DNS隧道绕过校园网认证
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/bb1221b4-cdf0-440a-b81d-a69752798cf9/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=e025fd4fee364475af11a938d83c7aa8424ec0c210aae7ad3a7519f5f341109e&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/Bypass-campusNet/campus.png
 id: 10f906e1-7468-80da-91a5-cf400874eee0
 ---
 
-> 本文在绝大数人眼里或许是篇福利文；在此文中介绍如何通过 DNS TUNNEL 的方式来绕过校园网认证，实现免认证免费上网；或许此招式并不是最优解，但对于绝大多数校园认证网确实能够成功实现。怎么说呢！其实我早盯上了校园网了。
+> 本文在绝大数人眼里或许是篇福利文；在此文中介绍如何通过 DNS TUNNEL 的方式来绕过校园网认证，实现免认证~~免费~~上网；或许此招式并不是最优解，但对于绝大多数校园认证网确实能够成功实现。
+>
+> 怎么说呢！其实我早盯上了校园网了。
 
 ## **场景分析**
 
@@ -28,21 +30,23 @@ id: 10f906e1-7468-80da-91a5-cf400874eee0
 
 在这所高校的网络中，统一使用的是 WiFi 热点客户端认证方式；当连上 WiFi 后，本机会向 DHCP 服务器获取一个内网 IP；关于这个 IP 地址，起初还让我很是疑惑，没想到在资源如此匮乏的大天朝，此运营商还会分一个公网 IP 给俺。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/504ccf9d-56a7-4ce5-a0cd-22ecd378fe17/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=efbebf995272c02c416662baf63feee36b00b9d90de215e9a6ecf42395ffc8d4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![ip-a](/img/post/Bypass-campusNet/ipa.jpg)
 
 后来才知道这是个保留地址，详见其  [维基百科](https://en.wikipedia.org/wiki/Reserved_IP_addresses) 。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/808eedf0-b34d-427e-99ff-dc2e2964085c/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=bf2454be362cabdd27811896372f9f565e0790fee1edc5bbbfa186514cb55e08&X-Amz-SignedHeaders=host&x-id=GetObject)
+| Address block | Scope    | Description                                                  |
+| ------------- | -------- | ------------------------------------------------------------ |
+| 100.64.0.0/10 | 私有网络 | [共享地址空间](https://en.wikipedia.org/wiki/IPv4_shared_address_space) |
 
 在未认证前还会弹出一个下载认证客户端软件的页面，这里所用到的恶心技术就是利用 HTTP 协议的缺陷，当我们访问一个 HTTP 的网站时，网关会对这个响应报文劫持篡改，给我们 302 重定向到一个指定的下载认证客户端页面。而当我们打开一个 HTTPS 类型的网站是不可能被劫持的。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/29ee3668-e355-4a1e-9ddc-99a71c600656/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=2121f8c0a9380b9fa045126ce0e51696e6834d9e511246b9cbd69bd621dbd002&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/Bypass-campusNet/campus.png)
 
 上图就是重定向后的客户端下载页面，让我匪夷所思的是最上面的那个位置本该是一个域名，为何是个公网 IP。既然没有使用域名，那何必需要 DNS，何不直接关闭 53 端口，为何让我如此这般有机可乘，实在让我百思不得其解 🤔。
 
 由下图可得知，DNS 53 端口是开启的。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/beb0c944-13b5-4d36-8bd2-b5c07c67500b/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=00999f7f9b8c679faf11f394406f48d79b4c8659e6c8126a3e66275196fd9013&X-Amz-SignedHeaders=host&x-id=GetObject)
+![nslookup](/img/post/Bypass-campusNet/nslookup.jpg)
 
 ### **原理简述**
 
@@ -56,13 +60,16 @@ id: 10f906e1-7468-80da-91a5-cf400874eee0
 
 简单来讲，既然 53 端口的 DNS 数据包可以通过网关/防火墙，那么就可以在本机运行一个程序，用来将其他端口数据包伪装成 DNS 数据包，发送到本地 DNS 服务器，这样网关/防火墙也不会进行拦截。但是这样仅只是将数据发送出去，如何回来呢？回来需要两个东西，一个是 VPS ，另一个就是域名。还得在域名购买商那里做如下解析设置：
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f5040d5d-b162-4e6c-b9eb-4dffd58a2e59/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=33006d76587c86705d7bd3a4c9114b8ebfa24230f4dcdedac9060a84f6193a0d&X-Amz-SignedHeaders=host&x-id=GetObject)
+| 主机记录 | 类型   | 值                 |
+| -------- | ------ | ------------------ |
+| NS       | d2t    | tunnel.0xf4n9x.com |
+| A        | tunnel | 47.73.228.119      |
 
 以上，d2t 和 tunnel 可以随意命名；另外，VPS 公网 IP 为 47.73.228.119。还有一点就是 VPS 是某马家的学生云，在此文发布之后，或可能未续费而停掉。意思就是说，不要想着搞我服务器了，虽然公网 IP 暴露了。
 
 然后步入正题做个假设，我们在本机 PC 上将数据包伪装成 DNS 数据，且向本地 DNS 服务器指定将要查询一个域名，而本地域名服务器收到数据后，并不能成功解析，便只能将此数据包进行转发，转发到哪里呢？请注意上表中的 NS 记录，就是用来指定一个域名由 VPS 来进行解析；所以毫无疑问，数据包顺利地到达服务器。接下来我们同样可以在 VPS 上运行一个同样的程序，用来对伪装的数据包来进行还原，然后再将还原的数据包发送到互联网中。再然后服务器就会收到回来的响应数据包，再对此响应包进行 伪装成 DNS 响应数据包，按照过来的路径，反向地将伪装好的 DNS 响应数据包发送到本机 PC，PC 收到 DNS 伪装响应包后，再对其进行还原，最终达到本机 PC 收到真正需要的数据包。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/02e3e8a4-ed5a-494c-9eb1-2caf1361fcbb/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=eae5cd143e0106551870655ba44063757a99466424b3057b87e931705d314ce8&X-Amz-SignedHeaders=host&x-id=GetObject)
+![flow chart](http://i1.wp.com/ww1.sinaimg.cn/large/006V665tgy1g19hlzc5fkj313t0h8dg6.jpg)
 
 ## **开始实战**
 
@@ -75,7 +82,10 @@ id: 10f906e1-7468-80da-91a5-cf400874eee0
 - Domain
   - 0xf4n9x.com
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b149d150-5940-46a3-8963-69acaa79c7df/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=c83582cb482708bd0c9d0892624ff59bbe7fbb6fcbb9580a04c5eb7908639dba&X-Amz-SignedHeaders=host&x-id=GetObject)
+| 主机记录 | 记录   | 值                 |
+| -------- | ------ | ------------------ |
+| NS       | d2t    | tunnel.0xf4n9x.com |
+| A        | tunnel | 47.73.228.119      |
 
 - PC
   - Ubuntu 18 desktop
@@ -90,7 +100,7 @@ id: 10f906e1-7468-80da-91a5-cf400874eee0
 
 这个工具其实是攻击者用来通过 DNS 隧道来反弹 shell 滴，不过我是拿来突破校园网认证。
 
-Github：[https://github.com/yarrick/iodine](https://github.com/yarrick/iodine)
+Github：https://github.com/yarrick/iodine
 
 ### **服务器**
 
@@ -138,7 +148,7 @@ ssh ubuntu@10.0.0.1 -D 9999
 
 不用很久，就会登录到服务器。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/bb1221b4-cdf0-440a-b81d-a69752798cf9/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=f5bfc1d6eab8bf56abb8d487cdc1dd8fa2e5b39b6584b1f9a0e8ed5fc48a7d64&X-Amz-SignedHeaders=host&x-id=GetObject)
+![iodined](/img/post/Bypass-campusNet/iodined.jpg)
 
 当出现上图标记的那段文字，即为成功。
 
@@ -146,19 +156,19 @@ ssh ubuntu@10.0.0.1 -D 9999
 
 开启系统自带代理。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/53c36842-fb18-46ce-98fe-b64e25ca387e/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=14def0cad33ffd3e24ec03c2629f1b9240be98b06c9b401e603930fd5a5b2565&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](http://i1.wp.com/ww1.sinaimg.cn/large/006V665tgy1g19ho5btdmj30j90dljrj.jpg)
 
 或者使用浏览器插件  [SwitchyOmega](https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif)（墙裂推荐）
 
 Github：[github.com/FelisCatus/SwitchyOmega](https://github.com/FelisCatus/SwitchyOmega)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/de4e819e-a3fc-4361-87df-32fb93e740df/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=9bdd313a17a75ac0a9bf144c4012406dde04d2bfac706100937b56223dc13fb8&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](http://i1.wp.com/ww1.sinaimg.cn/large/006V665tgy1g19hohv40aj30vk0i7mxr.jpg)
 
 代理服务器即本机，端口 9999。
 
 ### **测试**
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/dc9950da-34b6-4fe7-81da-2c1dcd3b2205/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=fba0eab4fc8c6af2874f0e6339e87f7d34b9db753ec4da22645bc6b685036bc9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/Bypass-campusNet/baidu.jpg)
 
 ## **质量**
 

