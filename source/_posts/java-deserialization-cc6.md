@@ -8,7 +8,7 @@ updated: 2023-03-12T00:00:00+00:00
 date: 2023-01-06T00:00:00+00:00
 slug: java-deserialization-cc6
 title: Java反序列化漏洞之CommonsCollections6链
-cover: /img/post/java-deserialization-cc6/1.png
+cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/044762f4-d488-4627-86cc-5da2ee2296a1/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T083949Z&X-Amz-Expires=3600&X-Amz-Signature=8fb3e167d8a4ef436a7de8a56d403080f1a3868faf915fe57f7a3bf977c9be5c&X-Amz-SignedHeaders=host&x-id=GetObject
 id: 113906e1-7468-80fc-b98a-e2ed823334d8
 ---
 
@@ -103,7 +103,7 @@ public class TiedMapEntryTest {
 }
 ```
 
-![](/img/post/java-deserialization-cc6/0.png)
+![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/fb1b01e5-bd20-42cd-93c1-0f66e3f6bcb8/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T083949Z&X-Amz-Expires=3600&X-Amz-Signature=2f78a8b1c802e28a9108aeb40217fb27d3102794d577076d8aa963a2c2dffc0c&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## HashMap
 
@@ -163,7 +163,7 @@ HashMap.readObject()
 
 public class URLDNS {
     public static void main(String[] args) throws Exception {
-        URL url = new URL("http://urldns.1asj4bef1af.ipv6.bypass.eu.org");
+        URL url = new URL("<http://urldns.1asj4bef1af.ipv6.bypass.eu.org>");
 
         Class c = Class.forName("java.net.URL");
         Field f = c.getDeclaredField("hashCode");
@@ -288,7 +288,7 @@ public class CC6WithHashMap {
 }
 ```
 
-![](/img/post/java-deserialization-cc6/1.png)
+![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/22041d36-421a-4a2e-99a8-520f5f13e825/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T083949Z&X-Amz-Expires=3600&X-Amz-Signature=9d75480d54e6f64b113a037e077a90bb5281ab75d2aefbe341510dc9ff8b14d9&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## HashSet
 
@@ -411,14 +411,11 @@ public class CC6WithHashSet {
 }
 ```
 
-![](/img/post/java-deserialization-cc6/2.png)
+![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/4ea8c519-24e9-49ad-b6e9-278f0cee4763/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241006%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241006T083949Z&X-Amz-Expires=3600&X-Amz-Signature=66496250995291f6823117b0c66ea9ae7a3c6b488b7ffb5ac572ea543eca7dc7&X-Amz-SignedHeaders=host&x-id=GetObject)
 
 ## 参考
 
-- https://0xf4n9x.github.io/java-deserialization-vulnerability-principle
-
-- https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap
-
-- https://0xf4n9x.github.io/java-deserialization-cc1-lazymap
-
-- https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections6.java
+- [https://0xf4n9x.github.io/java-deserialization-vulnerability-principle](https://0xf4n9x.github.io/java-deserialization-vulnerability-principle)
+- [https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap](https://0xf4n9x.github.io/java-deserialization-cc1-transformedmap)
+- [https://0xf4n9x.github.io/java-deserialization-cc1-lazymap](https://0xf4n9x.github.io/java-deserialization-cc1-lazymap)
+- [https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections6.java](https://github.com/frohoff/ysoserial/blob/master/src/main/java/ysoserial/payloads/CommonsCollections6.java)
