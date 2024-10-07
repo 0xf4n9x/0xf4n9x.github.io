@@ -2,8 +2,8 @@ name: Notion2Hexo GitHub Pages
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 22 * * 0'
+  # schedule:
+  #   - cron: '0 22 * * 0'
     # - cron: "*/30 1-17/1 * * *"
 
 concurrency:
