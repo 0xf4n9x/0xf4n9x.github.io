@@ -1,10 +1,10 @@
 ---
-created: 2024-10-06T09:04:00+00:00
+created: 2024-10-07T08:32:00+00:00
 updated: 2018-10-01T00:00:00+00:00
 date: 2018-10-01T00:00:00+00:00
 slug: hexo-test
-title: Hexo Test
-id: 117906e1-7468-8020-a9e6-e5730f50a177
+title: Hexo test
+id: 118906e1-7468-8096-ae99-f62127d2880e
 ---
 
-Hexo Test
+Hexo test…
