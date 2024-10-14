@@ -8,7 +8,7 @@ updated: 2024-09-28T00:00:00+00:00
 date: 2024-09-26T00:00:00+00:00
 slug: x__p-cracking
 title: X**p逆向破解分析
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d85da4fa-7931-4709-bfa6-e5d168a82240/s.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030528Z&X-Amz-Expires=3600&X-Amz-Signature=54c41dca99f5d533c831165b7d2a1951e492ac0aa17d0a6fa528bc75e58742e9&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/x__p-cracking/s.png
 id: 10f906e1-7468-8053-895d-ef51a6698ba1
 ---
 
@@ -16,7 +16,7 @@ id: 10f906e1-7468-8053-895d-ef51a6698ba1
 
 ## AI 自动摘要
 
-本文详细分析了 macOS 上一款知名截图软件 X\*_p 的逆向破解过程。文章首先介绍了该软件的基本情况，随后探讨了软件的目录结构，将重点关注 X_\*p 二进制程序与 X\*\*pLibrary.framework 框架。作者通过命令行运行和订阅流程发现了关键的日志信息，为后续分析提供了切入点。
+本文详细分析了 macOS 上一款知名截图软件 X\*\*p 的逆向破解过程。文章首先介绍了该软件的基本情况，随后探讨了软件的目录结构，将重点关注 X\*\*p 二进制程序与 X\*\*pLibrary.framework 框架。作者通过命令行运行和订阅流程发现了关键的日志信息，为后续分析提供了切入点。
 
 在静态分析阶段，使用 Hopper 和 IDA Pro 两款工具对二进制文件进行了深入研究，重点分析了与订阅相关的方法和字符串。随后，作者利用 Frida 进行动态 Hook，结合静态分析结果，逐步追踪到关键的授权验证逻辑。
 
@@ -30,7 +30,7 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 
 在 X\*\*p.app 包中，MacOS 文件夹中的 X\*\*p 为可执行程序文件，Frameworks 中则存放了软件所需的框架，是以.framework 结尾的 Bundle 结构，除此之外，Frameworks 目录中还有以.dylib 结尾的动态库文件。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/8b6279c3-7874-4725-9bd4-cdbf945b63c3/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=e012a6f6550af282793adaafa97820fab26a4223921389a2187fe052e3382d5e&X-Amz-SignedHeaders=host&x-id=GetObject)
+<img src="/img/post/x__p-cracking/0.png" style="zoom: 40%;" />
 
 根据文件的命名，当然是要着重留意 X\*\*p 二进制程序与 X\*\*pLibrary.framework 框架。
 
@@ -38,21 +38,21 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 
 打开该软件，先熟悉下应用程序的功能与配置，发现在首选项中存在两种订阅购买方案，一种是按年订阅付费，另一种是一次付费终生订阅。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/aea73f44-bc32-425e-bbd3-bb99da7c0626/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=e02688fafe1fca40c092ee9ecda0d230c5bc612c34652aed73ec77b518924b8e&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/1.png)
 
 原本开始的思路是，在网络层面做好 MITM，以对流量进行解密与监控，同时手工地去完成整个订阅购买流程，直到最终的付款确认那一步再取消。这个过程中，实时观察程序产生的网络请求、数据传输。
 
 但未能如我所愿，抓不到明文数据包，这个过程产生的流量似乎走的不是常规的 HTTP 协议？又或者是苹果公司做了限制，不允许这个过程的流量被轻易解密分析，毕竟涉及到敏感的金融支付。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/95537601-86d8-420f-b4c7-7e3fd628e5a6/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=7700b5ccab0f20cfcdbdebb11c71888e225d8ac5617f6a0ba288a7efe4b6b1b3&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/2.png)
 
 但偶然间，却在终端发现了一些面包屑，当我以命令行方式运行二进制 X\*\*p 程序，并手工地去完成整个订阅流程，直到最终的付款确认那一步再取消。此时，一些看似有价值的信息就会产生在终端。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/aeb8b1fe-f057-4275-ae15-70af62c5729e/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=e5b5a737d26581dde47a9b42d453c1474d5c4f3f5442dd199855dd882c97289c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/3.png)
 
-如上图中的日志，是在进行按年订阅付费时产生的。下图中的日志则是在进行一次付费终生订阅时产生的。留意两张图中的 itemName，1year_x\*\*p_pro 和 function_pack_1，根据字面意思，前者所代表的含义大概就是一年的 X\*\*p Pro；后者根据实践所得经验，对应的应该是一次付费终生订阅。
+如上图中的日志，是在进行按年订阅付费时产生的。下图中的日志则是在进行一次付费终生订阅时产生的。留意两张图中的 itemName，1year\_x\*\*p\_pro 和 function_pack_1，根据字面意思，前者所代表的含义大概就是一年的 X\*\*p Pro；后者根据实践所得经验，对应的应该是一次付费终生订阅。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/afae29bd-12ad-44b8-b19c-5a83bd807cc1/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=de472006647ca21c808b951f386e032f2c7dbe0024c91201c11b6149bb77274d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/4.png)
 
 这样的信息能出现在终端，大概是开发者的疏忽大意，忘记关闭日志输出。用相同的手段回过头去测上一个版本 2.2.3 的 X\*\*p 程序，终端却是无任何日志产生，在上一个版本中，开发者倒是有关闭日志输出的。
 
@@ -60,7 +60,7 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 
 ## 静动结合分析
 
-针对 macOS 应用程序的静态分析，我一般使用 Hopper，IDA Pro 也会用到，二者各有千秋，不妨结合使用、对比分析。对于此处的 X*\*p 二进制程序，就先用 Hopper 分析好了，根据如上找到的切入点，直接在 Hopper 中搜索 1year_x*\*p_pro 字符串。
+针对 macOS 应用程序的静态分析，我一般使用 Hopper，IDA Pro 也会用到，二者各有千秋，不妨结合使用、对比分析。对于此处的 X\*\*p 二进制程序，就先用 Hopper 分析好了，根据如上找到的切入点，直接在 Hopper 中搜索 1year\_x\*\*p\_pro 字符串。
 
 ```assembly
                      a1yearx**ppro:
@@ -71,9 +71,9 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 00000001001ae832         db         "function_pack_1_cn", 0     ; DATA XREF=cfstring_function_pack_1_cn
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2f7a6aec-2c7b-44b1-a7dc-d68498eef1fc/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=136b35d4db47767529d649381e1781fe6f85af00e9992bdf798af62a0420be0d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/searchinhopper.png)
 
-搜索结果如上，现在倒是如我所愿、意料之中了，不仅搜到了 1year_x*\*p_pro，function_pack_1 也出现了。跟进 1year_x*\*p_pro 的数据交叉引用，即 cfstring_1year_x\*\*p_pro，这里又有几个交叉引用，见下。
+搜索结果如上，现在倒是如我所愿、意料之中了，不仅搜到了 1year\_x\*\*p\_pro，function_pack_1 也出现了。跟进 1year\_x\*\*p\_pro 的数据交叉引用，即 cfstring_1year\_x\*\*p\_pro，这里又有几个交叉引用，见下。
 
 ```assembly
                      cfstring_1year_x**p_pro:
@@ -84,7 +84,7 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 00000001002092e8         dq         ___CFConstantStringClassReference, 0x7c8, aFunctionpack1c, 0x12 ; "function_pack_1_cn", DATA XREF=-[XNPRCHelper verifyRCData]+436, -[XNPBuyHelper refreshProductInfoWithHandler:]+328, qword_value_4297102056
 ```
 
-1year_x\*\*p_pro 存在着五个数据引用，其中有三个是类方法的引用，指向 Objective-C 方法中的特定偏移量，这意味着这些方法直接使用了该字符串常量进行某种操作。
+1year\_x\*\*p\_pro 存在着五个数据引用，其中有三个是类方法的引用，指向 Objective-C 方法中的特定偏移量，这意味着这些方法直接使用了该字符串常量进行某种操作。
 
 又根据与 function_pack_1 和 function_pack_1_cn 的数据引用重叠对比，最终确认如下两个引用应特别注意。
 
@@ -95,19 +95,19 @@ X\*\*p 是 macOS 上一款体积小巧的知名截图软件，其亮点在于拥
 
 逐一查看，首先是-[XNPRCHelper verifyRCData]+40，verifyRCData 这个方法的作用看起来是在订阅后对收据（Receipt）数据进行验证的。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0520c582-e943-4e03-b4dd-8fcf8db83ab7/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=ae2ddfd43c3ea9990ea0fdbd962a8582fc284574fb9ede98ea4787a1fdd392f8&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/5.png)
 
 如下是 IDA Pro 9.0 生成的伪代码，论人类可读性，IDA Pro 9.0 更胜一筹。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/7fb705d4-db52-45ac-8671-faa521c42d21/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=ae300b56d41fe3e8453b5d0fdc7a3ab4c0e7b99345c3c418855766aa8a8b7568&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/6.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/46100628-ba0e-4205-9d1d-c0888e40f326/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=3f2439964e44ea6b7d0333e8cdb76c7b52d143945decd4d02439875b3221af97&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/7.png)
 
 其次是-[XNPBuyHelper refreshProductInfoWithHandler:]+308，这个类方法从名称上来看，应该是通过处理程序刷新产品信息。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/637fc864-dc61-47e1-9d82-5aa7e7c12309/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=13fdc25a831d5b0f7ab4dfe37129a93a4f82fa4da9aa7a9f7883d7cd190cc184&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/8.png)
 
-根据伪代码逻辑，产品信息除了未订阅的状态外，无外乎 1year_x\*\*p_pro（年订阅）、function_pack_1 与 function_pack_1_cn 三种类型，后两者应该都是终身订阅，只是最后一者对应的应该（或许？）是大陆区。
+根据伪代码逻辑，产品信息除了未订阅的状态外，无外乎 1year\_x\*\*p\_pro（年订阅）、function_pack_1 与 function_pack_1_cn 三种类型，后两者应该都是终身订阅，只是最后一者对应的应该（或许？）是大陆区。
 
 在静态分析一筹莫展，且对伪代码和汇编指令毫无眉目之时，不妨借助动态 Hook 的方式来辅助分析。接下来，将利用 Frida 来 Hook X\*\*p 程序，以动态的方式结合上面静态分析的结果做进一步深入地研究。
 
@@ -125,7 +125,7 @@ codesign -f -s - --deep X**p.app
 X**p.app: replacing existing signature
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2180ec36-ce0a-4277-a5e5-16dff8d4bfa5/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=8a0c17045579cb0b5fd120988b2d7d6ed699da516a277766c35c6b2d02dae330&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/9.png)
 
 这里先对 XNPRCHelper verifyRCData 进行了 Hook，但该方法无论如何都触发不了调用。
 
@@ -135,7 +135,7 @@ X**p.app: replacing existing signature
 frida-trace -m "*[XNPBuyHelper refreshProductInfoWithHandler*]" X**p
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/03933e05-add7-402e-921b-b63cdfa8b93f/image1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=8d525878b8f1defe1cd2040922a465ec0865cf89c5e40d278da168605cf48dee&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/10.png)
 
 据此，推测授权调用点仍在 XNPBuyHelper refreshProductInfoWithHandler 方法的上层。
 
@@ -151,7 +151,7 @@ frida-trace -m "*[XNPBuyHelper refreshProductInfoWithHandler*]" X**p
 
 结构体中有一个 refreshProductInfoWithHandler 方法选择器，进一步查看引用，如下，直接进入 sub_10017c720+4 中。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/fb7c041f-7970-4ee5-aaf7-b0a773649b03/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=60eefce638f41e87efc490f704f5ca98a12b3aeba279cf97085170277852708f&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/11.png)
 
 ```assembly
                  sub_10017c2a0:
@@ -173,7 +173,7 @@ frida-trace -m "*[XNPBuyHelper refreshProductInfoWithHandler*]" X**p
 
 将注意力朝向-[XNPBuyViewController viewDidAppear]+180，对该方法进行 Hook，可发现当进入购买页面时，该方法同样被调用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/eafa0b43-1102-4e4d-aab3-452b2df52cbf/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=c1e665e521b390c4ef9ffe66af088e4dee050ed16d0d44fdc4ec73c58f6a55cc&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/12.png)
 
 此时，又对 XNPBuyViewController 类中的所有方法进行了 Hook，根据观察到的调用栈，一路追踪到 setupUIByPurchase 方法。
 
@@ -219,7 +219,7 @@ frida-trace -m "*[XNPBuyViewController *]" X**p
  ......
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/102bbf79-ccc1-4a9e-8ff7-f68d92072225/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=a79dec49213ad1814b8e98b7b3bc5b738c35703a9beca9f8733ef93a9e63945a&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/13.png)
 
 ```objective-c
 void __cdecl -[XNPBuyViewController setupUIByPurchase](XNPBuyViewController *self, SEL a2)
@@ -368,7 +368,7 @@ bool __cdecl -[XNPSystemStatus p](XNPSystemStatus *self, SEL a2)
 
 到此，事情就变得简单多了。我们还是先用 Frida Hook 这个方法，先看看其正常的返回值，如下图所示，在正常未订阅状态下，返回的是 0x0。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2272a65e-614f-4bc6-8aaf-97b375895a1f/image2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=e7823774412a4467de5b7cbfe6d635fbb861b860b1bcb874fda4347c31ad3601&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/14.png)
 
 那不妨劫持 p 方法，将其返回值修改为 0x1，看看会有何发生？
 
@@ -388,7 +388,7 @@ defineHandler({
 });
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f9245f16-0117-457c-96e0-b35006ff26c3/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=f90ade649648bdb343cab3a4351d684e07b791250d5c37fb953fe27c18bc9a6d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/15.png)
 
 破解了？但似乎不够完美。
 
@@ -409,11 +409,11 @@ bool __cdecl -[XNPSystemStatus p1](XNPSystemStatus *self, SEL a2)
 
 由于 p1 与 p 的相似性，猜测这可能就是控制另一种终生订阅授权方式的方法。遂继续回到 X\*\*p 中查找相关调用，发现在 XNPBuyFeatureViewController setupUIByPurchase 中存在其调用，且 XNPBuyFeatureViewController setupUIByPurchase 与 XNPBuyViewController 中的 setupUIByPurchase 方法也非常相似，这也印证了 p1 就是控制另一种终生订阅授权的方法的猜想。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0cfb2e31-458d-4532-8076-f84ded5e7fa8/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=ab4f4e1255381fd2f24b6b1dc535b2ea650f254b5bfd15bef85cd5a641a058f1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/16.png)
 
 既然如此，此处也利用 Frida Hook p1 方法，将其返回值由 0x0 改为 0x1，效果图如下，完全符合预期。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e7a4c410-c5fc-4ccc-836c-be2e1645ba91/image3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=8e775465fc8a5f984882834d16d4b7ab9bd0b702f7162034c3f9ac9939ee8a0a&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/17.png)
 
 ## 动态库注入
 
@@ -428,7 +428,7 @@ git clone https://github.com/tyilo/insert_dylib
 gcc insert_dylib/insert_dylib/main.c -o insert_dylib
 ```
 
-然后在 Frida 的 GitHub 仓库（[https://github.com/frida/frida/releases](https://github.com/frida/frida/releases)）中找到以 dylib 结尾的 Frida Gadget dylib 文件并下载。参考 Frida 官方文档，编写如下配置文件，命名为 frida.config，配置文件的文件名需要与 Frida Gadget dylib 的文件名保持一致。
+然后在 Frida 的 GitHub 仓库（<https://github.com/frida/frida/releases>）中找到以 dylib 结尾的 Frida Gadget dylib 文件并下载。参考 Frida 官方文档，编写如下配置文件，命名为 frida.config，配置文件的文件名需要与 Frida Gadget dylib 的文件名保持一致。
 
 ```json
 {
@@ -500,7 +500,7 @@ codesign -f -s - --deep X**p.app
 
 破解后的效果图如下，长截图功能正常使用，且无任何水印。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/209181d5-06b8-465a-8242-b5b8ffed5ebe/s.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241014%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241014T030529Z&X-Amz-Expires=3600&X-Amz-Signature=3148699bab884e12e087594fa65bfc7227dc98d47b90299374f8a2466c2871ea&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/x__p-cracking/s.png)
 
 ## 参考链接
 
