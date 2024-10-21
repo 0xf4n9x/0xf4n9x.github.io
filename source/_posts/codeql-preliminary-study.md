@@ -8,7 +8,7 @@ updated: 2023-08-25T00:00:00+00:00
 date: 2023-08-15T00:00:00+00:00
 slug: codeql-preliminary-study
 title: CodeQL自动化代码审计初探篇
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/55a5941a-5da3-47b7-8768-4957be153f6d/IMG_3240.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=95083804012df996d9254e9662ce6a9041e5b43f134698cc07b9ebccedc6c62c&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/codeql-preliminary-study/image%207.png
 id: 121906e1-7468-813c-a903-efc98b777d4d
 ---
 
@@ -88,19 +88,19 @@ LICENSE             codeql-workspace.yml  defs.bzl     misc        swift
 
 将 vscode-codeql-starter 克隆至本地后，每次都可以使用 VS Code 将其作为一个工作区打开。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e9b19df6-b417-4961-954b-68db154f1c6c/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=42bdfef53ae0f722fe18db42a2fd4a1b96fe84289ee2b166a9eec9b962f61449&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled.png)
 
 未来自己编写的 CodeQL 查询，都可以存放在这些目录中。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b9344d98-0468-4578-801f-21bc9017e5a5/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=bc55f5f602ae47a4b8f8c43c1cb52162ccfec57b7c627dfda963c6ca9acaee99&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%201.png)
 
 在`vscode-codeql-starter/ql/java/ql/src/Security/CWE/`文件夹中以.ql 作为后缀名的就是 GitHub 官方维护的 Java 程序常见漏洞的 CodeQL 查询，可直接拿来使用。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/da044af6-0127-4ccf-bb80-ab00df3f05ce/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=e9d949d843bcf8dce13280dae721d7fc5b3bdfaa46b9e48142cb171f626683bf&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%202.png)
 
 更直观地，可在如下网站（https://codeql.github.com/codeql-query-help/java-cwe/ ）看到受支持的全部 CWE（通用弱点枚举）。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/01687fc1-4dcd-47d1-a316-44126448aece/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=bb7813bce730216ffb40365f202eaa55cdfdbfce1797e2f8ad471dc66433bbd2&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%203.png)
 
 ### VS Code 扩展
 
@@ -108,17 +108,17 @@ LICENSE             codeql-workspace.yml  defs.bzl     misc        swift
 
 [https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-codeql](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-codeql)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0415a354-2d02-4830-b44f-71d7c442a5b0/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=8fe739a48e59a966106012da9fa9eb521a216cc8f40128bc9832ac627eea6838&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%204.png)
 
 除 CodeQL 扩展外，建议再安装一个 SARIF Viewer 扩展，用于查看 SARIF 日志文件。SARIF 全称静态分析结果交换格式，是一种定义输出文件格式的 OASIS 标准，SARIF 标准用于简化静态分析工具分享其结果的方式。
 
 [https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/b5beacbb-af04-4a9c-aef1-da29d28df184/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=1c5f5f06f1b0cc1d2fa1bb45a6739ef637fb55728512daa9f1945fc9d1b0875f&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image.png)
 
 ### 漏洞靶场环境
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/c4d31486-c51f-480e-9170-aa3846e72fdc/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023341Z&X-Amz-Expires=3600&X-Amz-Signature=40e764fbcb0f8827d4634f5e3c7b216dec98a93823fb28c18a4dbadfffb0ab98&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%205.png)
 
 对于漏洞靶场环境，本文将会采用 Java Sec Code 这一含有丰富漏洞类型的靶场环境，在~/CodeQL 下创建 vulns 文件夹，将这个靶场克隆至其中。
 
@@ -146,9 +146,9 @@ codeql database create ./jscdb -s ./java-sec-code -l java -c "mvn clean install 
 - `-l`：将用于分析的语言指定为 Java。
 - `-c`：对于编译型语言，构建命令将调用编译器对源代码进行分析。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/df330f7c-1aa1-44b0-8bae-739403d7a1da/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=6839ebf4278df7cdf5b468b4d8e28b1bca191d0e7f177bdf314fc90cbcf480b0&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%201.png)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f4a7ead7-79f2-43c9-9ff0-68dab636ac76/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=61c03899a0199a05606c0daa6222984d9fc7fad72246d880ffd6f68381ea72b5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%202.png)
 
 如上图，出现 Successfully created database 就意味着数据库创建成功了，成功创建后的数据库中包含代码的完整分层表示，包括抽象语法树、数据流图和控制流图。查看数据库文件夹，可看到关系数据（分析所需的）和源代码压缩包（创建数据库时创建的源代码副本）都存在其中，将来会用于显示分析结果。
 
@@ -168,16 +168,15 @@ baseline-info.json  codeql-database.yml db-java  diagnostic  log  src.zip
 ```bash
 codeql database analyze jscdb --format=sarif-latest --output=jsc-scan-result.sarif
 ```
-
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/2703363d-c30d-43f8-bee4-0364fd9af79f/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=ba2fc06dc7b694555b804398159c76d4797dcd037737fe2c17e9496f5d1d393c&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%203.png)
 
 接着，通过 VS Code 打开 vscode-codeql-starter 工作区，并在 CodeQL 插件中添加 jscdb 数据库文件夹。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d19b7bf7-95b4-4019-9016-5ea5e63a60ff/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=7b6c060ec699b4731ff3beb578ba2dbd6889e593b63cd20d09771bb1568b4aba&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/Untitled%206.png)
 
 然后，再用 VS Code 打开 jsc-scan-result.sarif 文件。如下图所见，此前安装的 SARIF Viewer 扩展起到作用了，这样分析 SARIF 文件就会变得很方便。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/42d98c3d-963b-4f0d-8edb-9fe89693097b/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=aa6f3af7dae0920ca2e7304483abf5be15327449ef6afdc91a20d875a469e4aa&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%204.png)
 
 漏洞代码如下。
 
@@ -215,11 +214,11 @@ public String singleFileUpload(@RequestParam("file") MultipartFile file,
 codeql database analyze jscdb --format=csv --output=jsc-scan-result.csv
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/ed8f7fad-d977-4ee9-8dec-0d8a790091f8/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=bc0338ce97e40b849d345a237787e5cc192329b14f60b92bb89462c1fd144621&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%205.png)
 
 在 Excel 中打开 jsc-scan-result.csv 文件，可看到如下结果，但这种方式就不如上面的那么直观。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/0a69188e-c53f-48ff-b4f5-ac1828140162/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=7140777e918343e31688f63b33c472beaca2681901270a1437cf23b1cfd3861b&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%206.png)
 
 ### 在 VS Code 中查询分析
 
@@ -250,7 +249,7 @@ public class Log4j {
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/d3970c49-15f0-4097-88c2-6d6c3a93dc4c/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45HZZMZUHI%2F20241021%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241021T023342Z&X-Amz-Expires=3600&X-Amz-Signature=822b57e53e52e02e87ef49bee8992d1313c3ede170abcfca1862158f73e42181&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/codeql-preliminary-study/image%207.png)
 
 不过，这种方式在数量上有限制，单次最多只可运行 20 个查询。
 
