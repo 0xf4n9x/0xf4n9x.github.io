@@ -9,7 +9,7 @@ updated: 2024-11-03T00:00:00+00:00
 date: 2024-11-02T00:00:00+00:00
 slug: cracking-ai-app-by-mitm-attack
 title: 利用中间人攻击破解某基于ChatGPT的第三方AI应用
-cover: https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/939b2369-ac8f-460a-b22a-846b067df5e9/ai.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055824Z&X-Amz-Expires=3600&X-Amz-Signature=5494426ed3abb789c4701e1f3ed79307576940c47c021ffaff4ae37fbaff1b30&X-Amz-SignedHeaders=host&x-id=GetObject
+cover: /img/post/cracking-ai-app-by-mitm-attack/cover.png
 id: 133906e1-7468-8011-8df1-c9615dc528f4
 ---
 
@@ -29,7 +29,7 @@ id: 133906e1-7468-8011-8df1-c9615dc528f4
 
 有了猜想，于是我们就可以想到通过类似 Proxifier 这样的代理链工具，将此 AI 应用的全部 HTTP 流量强制转到 BurpSuite，以监控该应用在完整通信流程中所产生的全部 HTTP 流量。同时，在 BurpSuite 端开启请求与响应的劫持，后续可能需要篡改响应数据。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/f0ba9e71-d857-428a-89b8-4ac0459d67f8/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=3b264c2e69fdf3861bb7325b1ee842d04041b78c99cb63aedaa9d0659730a0a0&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image.png)
 
 此时，再打开这个 AI 应用，回到 BurpSuite 中便可观察到如下 GET 请求，请求的域名为 api.revenuecat.com。
 
@@ -83,11 +83,11 @@ x-request-id: badbd6c7-0439-447c-af24-1637931cbf08
 
 所以，这里需要篡改删除响应中的 x-revenuecat-etag 标头（相当于清除缓存）并放行，使 AI 应用程序接收到该响应，这样才会有后续的请求发生。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/909d3f7c-a512-4e39-8732-ebee708ef85f/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=a074b4a154eb6594dccce8504eb47a700539682e88fcd408cda6f5eb61454fc5&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%201.png)
 
 不出所料，AI 应用程序发起了一个同样的请求，但却接收到了不一样的响应数据。仔细观察请求包中的 X-Revenuecat-Etag 标头，可推断出当这个 HTTP 标头的值为空时，才不会受缓存的影响，才能收到正常的响应数据。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/6371d678-7551-44bd-8ff1-482b7f91d93f/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=02436007762560f7912fd4d1c169d2e07fef51821da867af713a3417c39a7cca&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%202.png)
 
 ```json
 {
@@ -152,7 +152,7 @@ Connection: keep-alive
 
 随后，又收到了一个 304 状态码且带 x-revenuecat-etag 标头的空响应，依旧按照上面的处理方式，去除 x-revenuecat-etag 标头并放行，使 AI 应用程序接收到经过篡改的响应。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/40513a7c-2136-4b77-80f7-01b6b00d7a9c/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=78c121fd1b8f3f352b08f20418dd1420ff99d07c4a8ee476d5ca12efdccd1c59&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%203.png)
 
 不出意料，AI 应用程序又发起了一个同样的请求，但响应有所不同了，见如下。
 
@@ -185,7 +185,7 @@ Connection: keep-alive
 
 [https://www.revenuecat.com/docs/api-v1#tag/customers/operation/subscribers](https://www.revenuecat.com/docs/api-v1#tag/customers/operation/subscribers)
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e63cdfb7-214c-46ce-a916-82728c0d44c6/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=8a79519fcbbdbd7fb9fa8da82cd89fe066b34088ef1211780c4f49a4d6ed16d4&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%204.png)
 
 根据文档所述，/v1/subscribers/{app_user_id}接口是一个获取或创建客户的 API，作用是使用给定的 App User ID 获取客户的最新客户信息，如果不存在，则创建新客户。同时，官方还给出了一个响应示例，见如下 JSON。
 
@@ -231,7 +231,7 @@ Connection: keep-alive
 
 将官方提供的这份响应示例与我们的响应相对比，可发现最主要的差别在于后者缺失了 subscriber.entitlements 和 subscriber.subscriptions 字段内容。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/8f674324-8cfc-40f5-9f12-5e5d3a083d91/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=867bbabe357f5e03d4138e5f8302ee3a9ca2f5a03c04c9e2163898480be221e9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%205.png)
 
 参照官方提供的响应示例，将缺失的相关字段补充上，部分字段的值可参考请求 offerings 接口所获取的报价信息。然后重启应用以重来一遍订阅验证流程，直到接收到最后一个请求的响应时，劫持并篡改替换为如下内容。
 
@@ -268,11 +268,11 @@ Connection: keep-alive
 }
 ```
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/55f1efed-f942-4662-b0ac-bf0e747cb267/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=d8e9abe289acdef509555d3854f84e4c529f8258417803b84b271b3b471bc2de&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%206.png)
 
 此刻，回到 AI 应用中，可发现应用中已显示“享受无限制的使用”，即表明破解成功。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/7dae3fee-19f2-457c-9b31-9ae06617b086/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=834b84fa7093aa517235bfb9cbb7c8b72138b6e0dc28567b75659c8d7e0136a9&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%207.png)
 
 总结下破解的两个关键。一是，当请求包中出现了 X-Revenuecat-Etag 标头值，需要去除，否则服务器端会认定客户端存在缓存，从而不返回任何响应数据。第二个关键，在服务器端返回客户的订阅信息到客户端之前，需要将此数据篡改为已订阅的数据，从而欺骗到位于客户端中的订阅验证机制。
 
@@ -324,11 +324,11 @@ $done(obj);
 
 那么，根据前面总结的破解的两个关键，编写如上 JavaScript 脚本，并将脚本导入至小火箭，配置如下两条规则，以及开启 HTTPS 解密。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/03d2c0a5-0986-447d-9585-ecaa4ac18dd4/image.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=cb58d54dca9efea0922d9856507b273f724786345c0fbf78cb2e19994abc038d&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%208.png)
 
 现在，打开 iOS 端应用，即可发现应用被成功破解。
 
-![](https://prod-files-secure.s3.us-west-2.amazonaws.com/67fdb170-fbbe-4acc-adb2-bfe5483404bd/e5181e7c-cf22-4485-b297-b3fef3fee13f/Picsew_20241105003943.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45GO43JXI4%2F20241118%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20241118T055825Z&X-Amz-Expires=3600&X-Amz-Signature=a8004a81363458790fdc4033e31987daae0c9c49deff12e2d16ba724e4d6b6e3&X-Amz-SignedHeaders=host&x-id=GetObject)
+![](/img/post/cracking-ai-app-by-mitm-attack/image%209.jpeg)
 
 ## 漏洞修复
 
