@@ -4,7 +4,7 @@
 
 menu:
   # Home: / || fas fa-home
-  Notion: https://f4ng.notion.site/10f906e17468803faee9c2d943f190d2 || fas fa-n
+  Notion: https://f4ng.notion.site/12d906e1746880f1807ad655cb2f2d8f || fas fa-n
   Archives: /archives/ || fas fa-archive
   Categories: /categories/ || fas fa-folder-open
   Tags: /tags/ || fas fa-tags
@@ -692,10 +692,10 @@ aside:
       enable: true
       icon: fab fa-n
       text: Notion
-      link: https://f4ng.notion.site/10f906e17468803faee9c2d943f190d2
+      link: https://f4ng.notion.site/12d906e1746880f1807ad655cb2f2d8f
   card_announcement:
     enable: true
-    content: 本站自动生成自Notion，若遇到图片显示不正常，请访问Notion原站，见最上方菜单栏。
+    content: 本站自动生成自Notion，若遇到图文显示不正常，请访问Notion原站，见最上方菜单栏。
   card_recent_post:
     enable: true
     limit: 5 # if set 0 will show all
